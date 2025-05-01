@@ -7,16 +7,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const otpGroup = document.getElementById('otpGroup');
     const otpError = document.getElementById('otpError');
     const phoneError = document.getElementById('phoneError');
-    const passwordError = document.getElementById('passwordError');
     const continueBtn = document.getElementById('continueBtn');
     const otpTimer = document.getElementById('otpTimer');
-    const termsLink = document.getElementById('termsLink');
-    const modal = document.getElementById('termsModal');
-    const closeModal = document.querySelector('.close-modal');
-    const togglePassword = document.getElementById('togglePassword');
-    const toggleConfirmPassword = document.getElementById('toggleConfirmPassword');
-    const passwordInput = document.getElementById('password');
-    const confirmPasswordInput = document.getElementById('confirmPassword');
 
     // Variables
     let generatedOtp = '';
@@ -24,32 +16,55 @@ document.addEventListener('DOMContentLoaded', function() {
     let otpTimerInterval;
     let isPhoneVerified = false;
 
-    // Check if phone number is already registered
-    function isPhoneRegistered(phone) {
-        const users = JSON.parse(localStorage.getItem('users')) || [];
-        return users.some(user => user.phone === phone);
-    }
-
     // Generate 6-digit OTP
     function generateOtp() {
         return Math.floor(100000 + Math.random() * 900000).toString();
     }
 
-    // Simulate sending OTP via SMS
-    function sendOtpToPhone(phone, otp) {
-        // In production, replace with actual SMS API call
-        console.log(`OTP sent to +91${phone}: Dear Customer, your SKR OTP is ${otp}, it valid for 5 minutes only.`);
-        
-        // Store OTP and expiry time (5 minutes from now)
-        generatedOtp = otp;
-        otpExpiryTime = Date.now() + 5 * 60 * 1000;
-        
-        // Show OTP field and start timer
-        otpGroup.style.display = 'block';
-        startOtpTimer();
-        
-        // Update button text
-        document.getElementById('btnText').textContent = 'Resend OTP';
+    // Send OTP via SMS API
+    async function sendOtpToPhone(phone, otp) {
+        try {
+            // Using MSG91 API (replace with your actual API key)
+            const response = await fetch('https://api.msg91.com/api/v5/otp', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'authkey': 'YOUR_MSG91_AUTH_KEY' // Replace with actual key
+                },
+                body: JSON.stringify({
+                    mobile: `91${phone}`, // Indian country code
+                    template_id: 'YOUR_TEMPLATE_ID', // Approved DLT template
+                    otp: otp,
+                    otp_expiry: 5 // 5 minutes expiry
+                })
+            });
+
+            const result = await response.json();
+            
+            if (result.type === 'success') {
+                // Store OTP and expiry time
+                generatedOtp = otp;
+                otpExpiryTime = Date.now() + 5 * 60 * 1000;
+                
+                // Show OTP field and start timer
+                otpGroup.style.display = 'block';
+                startOtpTimer();
+                
+                // Update button text
+                document.getElementById('btnText').textContent = 'Resend OTP';
+                
+                console.log(`OTP sent successfully to ${phone}`);
+                return true;
+            } else {
+                console.error('OTP send failed:', result.message);
+                showError(phoneError, 'Failed to send OTP. Please try again.');
+                return false;
+            }
+        } catch (error) {
+            console.error('OTP API error:', error);
+            showError(phoneError, 'Network error. Please check your connection.');
+            return false;
+        }
     }
 
     // Start OTP countdown timer
@@ -93,25 +108,6 @@ document.addEventListener('DOMContentLoaded', function() {
         return true;
     }
 
-    // Validate password
-    function validatePassword() {
-        const password = passwordInput.value;
-        const confirmPassword = confirmPasswordInput.value;
-        
-        if (password.length < 8) {
-            showError(passwordError, 'Password must be at least 8 characters');
-            return false;
-        }
-        
-        if (password !== confirmPassword) {
-            showError(passwordError, 'Passwords do not match');
-            return false;
-        }
-        
-        hideError(passwordError);
-        return true;
-    }
-
     // Validate phone number
     function validatePhoneNumber(phone) {
         const phoneRegex = /^[6-9]\d{9}$/;
@@ -119,12 +115,6 @@ document.addEventListener('DOMContentLoaded', function() {
             showError(phoneError, 'Please enter a valid 10-digit Indian number');
             return false;
         }
-        
-        if (isPhoneRegistered(phone)) {
-            showError(phoneError, 'This number is already registered');
-            return false;
-        }
-        
         hideError(phoneError);
         return true;
     }
@@ -144,123 +134,49 @@ document.addEventListener('DOMContentLoaded', function() {
         element.style.display = 'none';
     }
 
-    // Toggle password visibility
-    function togglePasswordVisibility(input, icon) {
-        if (input.type === 'password') {
-            input.type = 'text';
-            icon.classList.replace('fa-eye', 'fa-eye-slash');
-        } else {
-            input.type = 'password';
-            icon.classList.replace('fa-eye-slash', 'fa-eye');
-        }
-    }
-
     // Event Listeners
-    sendOtpBtn.addEventListener('click', function() {
+    sendOtpBtn.addEventListener('click', async function() {
         const phone = phoneInput.value.trim();
         
         if (!validatePhoneNumber(phone)) return;
         
+        // Disable button during request
+        this.disabled = true;
+        document.getElementById('btnText').textContent = 'Sending...';
+        
         const otp = generateOtp();
-        sendOtpToPhone(phone, otp);
+        const otpSent = await sendOtpToPhone(phone, otp);
+        
+        // Re-enable button
+        this.disabled = false;
+        if (!otpSent) {
+            document.getElementById('btnText').textContent = 'Send OTP';
+        }
     });
 
     otpInput.addEventListener('input', function() {
         const otp = this.value.trim();
         
         if (otp.length === 6) {
-            if (validateOtp(otp)) {
-                continueBtn.disabled = false;
-            }
+            continueBtn.disabled = !validateOtp(otp);
         } else {
             continueBtn.disabled = true;
-        }
-    });
-
-    passwordInput.addEventListener('input', validatePassword);
-    confirmPasswordInput.addEventListener('input', validatePassword);
-
-    togglePassword.addEventListener('click', function() {
-        togglePasswordVisibility(passwordInput, this);
-    });
-
-    toggleConfirmPassword.addEventListener('click', function() {
-        togglePasswordVisibility(confirmPasswordInput, this);
-    });
-
-    termsLink.addEventListener('click', function(e) {
-        e.preventDefault();
-        modal.style.display = 'block';
-    });
-
-    closeModal.addEventListener('click', function() {
-        modal.style.display = 'none';
-    });
-
-    window.addEventListener('click', function(e) {
-        if (e.target === modal) {
-            modal.style.display = 'none';
         }
     });
 
     form.addEventListener('submit', function(e) {
         e.preventDefault();
         
-        // Validate all fields
-        const username = document.getElementById('username').value.trim();
-        const name = document.getElementById('name').value.trim();
-        const phone = phoneInput.value.trim();
-        const otp = otpInput.value.trim();
-        const password = passwordInput.value;
-        const termsChecked = document.getElementById('terms').checked;
-        
-        if (!username || !name || !phone || !otp || !password || !termsChecked) {
-            alert('Please fill all required fields');
-            return;
-        }
-        
         if (!isPhoneVerified) {
             showError(otpError, 'Please verify your phone number with OTP');
             return;
         }
         
-        if (!validatePassword()) return;
-        
-        // Create user object
-        const user = {
-            username,
-            name,
-            phone,
-            password: btoa(password), // Simple encoding (use proper hashing in production)
-            isVerified: false,
-            balance: 0,
-            joinedDate: new Date().toISOString(),
-            referralCode: `SKR${Math.floor(1000 + Math.random() * 9000)}${username.slice(0, 3).toUpperCase()}`
-        };
-        
-        // Save user to localStorage
-        let users = JSON.parse(localStorage.getItem('users')) || [];
-        users.push(user);
-        localStorage.setItem('users', JSON.stringify(users));
-        
-        // Save current user session
-        sessionStorage.setItem('currentUser', JSON.stringify({
-            username,
-            phone,
-            isLoggedIn: true
-        }));
-        
-        // Notify admin (simulated)
-        notifyAdminNewUser(user);
-        
-        // Redirect to verification page
-        window.location.href = 'verification.html';
+        // Proceed with registration
+        alert('Registration successful!');
+        // window.location.href = 'dashboard.html';
     });
 
-    // Simulate admin notification
-    function notifyAdminNewUser(user) {
-        console.log('New user registered:', user);
-        // In production: Send to backend/admin panel
-        // fetch('/api/notify-admin', { method: 'POST', body: JSON.stringify(user) });
-    }
+    // For testing purposes only (remove in production)
+    console.warn('Development mode: OTP will be logged to console');
 });
