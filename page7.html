@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EarnWithSKR - Professional Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="page7.css">
+</head>
+<body>
+    <!-- Top Header -->
+    <header class="header">
+        <div class="logo">EarnWithSKR</div>
+        <button class="admin-redirect-btn" onclick="redirectToAdminPanel()">
+            <i class="fas fa-user-shield"></i> Admin Panel
+        </button>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content" id="mainContent">
+        <!-- Dashboard Tab -->
+        <div class="tab-content active" id="dashboard">
+            <div class="stats-container">
+                <div class="stat-card pulse">
+                    <i class="fas fa-wallet"></i>
+                    <h3>Wallet Balance</h3>
+                    <div class="amount" id="walletBalance">₹0.00</div>
+                </div>
+                <div class="stat-card pulse">
+                    <i class="fas fa-coins"></i>
+                    <h3>Total Earnings</h3>
+                    <div class="amount" id="totalEarnings">₹0.00</div>
+                </div>
+                <div class="stat-card pulse">
+                    <i class="fas fa-ad"></i>
+                    <h3>Total Ads Watched</h3>
+                    <div class="amount" id="totalAds">0</div>
+                </div>
+            </div>
+
+            <button class="primary-btn glow" id="watchAdsBtn">
+                <i class="fas fa-play"></i> Watch Ads Now
+            </button>
+
+            <div class="daily-progress">
+                <div class="progress-header">
+                    <h3>Daily Ads Progress</h3>
+                    <div class="progress-count" id="dailyProgress">0/10</div>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+                </div>
+                <button class="claim-btn disabled" id="claimBtn">Claim ₹2</button>
+            </div>
+
+            <div class="available-ads">
+                <h3>Available Ads</h3>
+                <div id="adSlotsContainer">
+                    <!-- Ads will be dynamically inserted here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Ads Tab -->
+        <div class="tab-content" id="ads">
+            <div class="ad-container">
+                <div class="ad-player">
+                    <div class="ad-placeholder">
+                        <i class="fas fa-ad"></i>
+                        <p>Advertisement will play here</p>
+                    </div>
+                    <div class="ad-timer" id="adTimer">30s</div>
+                </div>
+                <button class="primary-btn" id="startAdBtn">Start Ad</button>
+            </div>
+
+            <div class="ad-history">
+                <h3>Ad Watch History</h3>
+                <div class="history-list" id="adHistoryList">
+                    <div class="empty-state">
+                        <i class="fas fa-history"></i>
+                        <p>No ads watched yet</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Referral Tab -->
+        <div class="tab-content" id="referral">
+            <div class="referral-container">
+                <div class="referral-header">
+                    <h2>Earn ₹7 Per Referral</h2>
+                    <p>Invite friends to join and earn when they verify their account</p>
+                </div>
+
+                <div class="referral-code-box">
+                    <h3>Your Referral Code</h3>
+                    <div class="code-display" id="referralCodeDisplay">SKR0001</div>
+                    <div class="referral-name" id="referralName">(John Doe)</div>
+                    <button class="copy-btn" id="copyCodeBtn">
+                        <i class="fas fa-copy"></i> Copy Code
+                    </button>
+                    <button class="share-btn" id="shareBtn">
+                        <i class="fas fa-share-alt"></i> Share Link
+                    </button>
+                </div>
+
+                <div class="referral-stats">
+                    <div class="stat-item">
+                        <div class="stat-value" id="totalReferrals">0</div>
+                        <div class="stat-label">Total Referrals</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value" id="referralEarnings">₹0</div>
+                        <div class="stat-label">Earned</div>
+                    </div>
+                </div>
+
+                <div class="referral-list">
+                    <h3>Your Referrals</h3>
+                    <div class="referrals-container" id="referralsList">
+                        <div class="empty-state">
+                            <i class="fas fa-users"></i>
+                            <p>No referrals yet</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Wallet Tab -->
+        <div class="tab-content" id="wallet">
+            <div class="wallet-balance">
+                <h3>Available Balance</h3>
+                <div class="balance-amount" id="walletBalanceAmount">₹0.00</div>
+            </div>
+
+            <div class="withdrawal-form">
+                <h3>Withdraw Money</h3>
+                <div class="form-group">
+                    <label>Amount (Min ₹110)</label>
+                    <input type="number" placeholder="Enter amount" id="withdrawAmount" min="110">
+                </div>
+                <div class="form-group">
+                    <label>UPI ID</label>
+                    <input type="text" placeholder="Enter UPI ID" id="upiId">
+                </div>
+                <button class="primary-btn" id="withdrawBtn">Withdraw</button>
+            </div>
+
+            <div class="withdrawal-history">
+                <h3>Withdrawal History</h3>
+                <div class="history-list" id="withdrawalHistoryList">
+                    <div class="empty-state">
+                        <i class="fas fa-history"></i>
+                        <p>No withdrawals yet</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Profile Tab -->
+        <div class="tab-content" id="profile">
+            <div class="profile-header">
+                <div class="profile-pic">
+                    <i class="fas fa-user-circle"></i>
+                    <button class="edit-pic" id="editProfilePic"><i class="fas fa-camera"></i></button>
+                </div>
+                <div class="verification-badge" id="verificationBadge">
+                    <i class="fas fa-times-circle"></i> Not Verified
+                </div>
+            </div>
+
+            <div class="profile-details">
+                <div class="detail-item">
+                    <span class="detail-label">Name:</span>
+                    <span class="detail-value" id="userName">John Doe</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Username:</span>
+                    <span class="detail-value" id="userUsername">johndoe123</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Mobile:</span>
+                    <span class="detail-value" id="userMobile">+91 9876543210</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Join Date:</span>
+                    <span class="detail-value" id="joinDate">15 June 2023</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Verified Until:</span>
+                    <span class="detail-value" id="verifiedUntil">-</span>
+                </div>
+            </div>
+
+            <div class="verify-section" id="verifySection">
+                <h3>Verify Your Account</h3>
+                <p>Pay ₹21 to verify your account for 30 days</p>
+                <button class="verify-btn" onclick="window.location.href='page6.html'">
+                    <i class="fas fa-check-circle"></i> Verify Now (₹21)
+                </button>
+            </div>
+
+            <div class="settings-section">
+                <h3>Settings</h3>
+                <ul class="settings-menu">
+                    <li onclick="downloadApp()">
+                        <i class="fas fa-download"></i> Download App
+                    </li>
+                    <li onclick="contactUs()">
+                        <i class="fas fa-headset"></i> Contact Us
+                    </li>
+                    <li onclick="showHelp()">
+                        <i class="fas fa-question-circle"></i> Help & Support
+                    </li>
+                    <li onclick="showAbout()">
+                        <i class="fas fa-info-circle"></i> About Us
+                    </li>
+                    <li id="logoutBtn">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="#" class="nav-item active" data-tab="dashboard">
+            <i class="fas fa-home"></i>
+            <span>Dashboard</span>
+        </a>
+        <a href="#" class="nav-item" data-tab="ads">
+            <i class="fas fa-ad"></i>
+            <span>Ads</span>
+        </a>
+        <a href="#" class="nav-item" data-tab="referral">
+            <i class="fas fa-user-plus"></i>
+            <span>Refer & Earn</span>
+        </a>
+        <a href="#" class="nav-item" data-tab="wallet">
+            <i class="fas fa-wallet"></i>
+            <span>Wallet</span>
+        </a>
+        <a href="#" class="nav-item" data-tab="profile">
+            <i class="fas fa-user"></i>
+            <span>Profile</span>
+        </a>
+    </nav>
+
+    <!-- Withdrawal Confirmation Modal -->
+    <div class="modal" id="withdrawalModal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Confirm Withdrawal</h2>
+            <div class="withdrawal-details">
+                <p>Amount: <span id="confirmAmount">₹0</span></p>
+                <p>UPI ID: <span id="confirmUpiId">example@upi</span></p>
+            </div>
+            <button class="submit-btn" id="confirmWithdrawBtn">Confirm Withdrawal</button>
+        </div>
+    </div>
+
+    <script src="page7.js"></script>
+</body>
+</html>

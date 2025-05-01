@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SKR Admin Panel</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.css">
+    <link rel="stylesheet" href="Admin panel.css">
+</head>
+<body>
+    <!-- Login Screen -->
+    <div class="login-container" id="loginScreen">
+        <div class="login-card animate__animated animate__ZoomIn">
+            <img src="Admin logo.jpg" alt="Admin Logo" class="logo">
+            <h2>Admin Login</h2>
+            <div class="input-group">
+                <i class="fas fa-user"></i>
+                <input type="text" id="adminId" placeholder="Admin ID">
+            </div>
+            <div class="input-group">
+                <i class="fas fa-lock"></i>
+                <input type="password" id="adminPassword" placeholder="Password">
+                <i class="fas fa-eye toggle-password"></i>
+            </div>
+            <button onclick="adminLogin()" class="login-btn">
+                <span>Login</span>
+                <div class="liquid"></div>
+            </button>
+            <p id="loginError" class="error-message"></p>
+        </div>
+    </div>
+
+    <!-- Admin Panel (Hidden until login) -->
+    <div class="admin-panel" id="adminPanel">
+        <!-- Top Navigation Bar -->
+        <nav class="top-nav animate__animated animate__fadeInDown">
+            <div class="nav-left">
+                <button class="menu-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <h1 class="logo-text">SKR Admin Panel</h1>
+            </div>
+            <div class="nav-center">
+                <a href="#" class="nav-link active" data-section="dashboard"><i class="fas fa-home"></i> Dashboard</a>
+                <a href="#" class="nav-link" data-section="verifications"><i class="fas fa-user-check"></i> Verifications</a>
+                <a href="#" class="nav-link" data-section="withdrawals"><i class="fas fa-wallet"></i> Withdrawals</a>
+            </div>
+            <div class="nav-right">
+                <div class="notification-bell">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-count">0</span>
+                </div>
+                <div class="admin-profile">
+                    <img src="Logo.png" alt="Admin">
+                    <span>Admin</span>
+                    <i class="fas fa-angle-down"></i>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content Area -->
+        <div class="main-content">
+            <!-- Sidebar -->
+            <aside class="sidebar animate__animated animate__fadeInLeft">
+                <div class="sidebar-menu">
+                    <a href="#" class="menu-item active" data-section="dashboard">
+                        <i class="fas fa-tachometer-alt"></i>
+                        <span>Dashboard</span>
+                    </a>
+                    <a href="#" class="menu-item" data-section="verifications">
+                        <i class="fas fa-user-check"></i>
+                        <span>Verifications</span>
+                        <span class="badge new-verifications">0</span>
+                    </a>
+                    <a href="#" class="menu-item" data-section="users">
+                        <i class="fas fa-users"></i>
+                        <span>User Management</span>
+                    </a>
+                    <a href="#" class="menu-item" data-section="referrals">
+                        <i class="fas fa-user-friends"></i>
+                        <span>Referral Tracking</span>
+                    </a>
+                    <a href="#" class="menu-item" data-section="withdrawals">
+                        <i class="fas fa-wallet"></i>
+                        <span>Withdrawals</span>
+                        <span class="badge new-withdrawals">0</span>
+                    </a>
+                    <a href="#" class="menu-item" data-section="ads">
+                        <i class="fas fa-ad"></i>
+                        <span>Ads Management</span>
+                    </a>
+                    <a href="#" class="menu-item" data-section="reports">
+                        <i class="fas fa-chart-bar"></i>
+                        <span>Reports</span>
+                    </a>
+                    <a href="#" class="menu-item" data-section="settings">
+                        <i class="fas fa-cog"></i>
+                        <span>Settings</span>
+                    </a>
+                </div>
+            </aside>
+
+            <!-- Content Sections -->
+            <div class="content-area">
+                <!-- Dashboard Section -->
+                <section id="dashboard" class="content-section active animate__animated animate__fadeIn">
+                    <h2 class="section-title">Dashboard Overview</h2>
+                    
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon blue">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="totalUsers">0</h3>
+                                <p>Total Users</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon green">
+                                <i class="fas fa-rupee-sign"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="totalEarnings">₹0</h3>
+                                <p>Total Earnings</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon orange">
+                                <i class="fas fa-ad"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="activeAds">0</h3>
+                                <p>Active Ads</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon purple">
+                                <i class="fas fa-hand-holding-usd"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="totalWithdrawals">₹0</h3>
+                                <p>Total Withdrawals</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="charts-container">
+                        <div class="chart-card">
+                            <canvas id="earningsChart"></canvas>
+                        </div>
+                        <div class="chart-card">
+                            <canvas id="userGrowthChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="recent-activity">
+                        <h3>Recent Activity</h3>
+                        <div class="activity-list" id="activityList">
+                            <!-- Activities will be loaded here -->
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Verification Requests Section -->
+                <section id="verifications" class="content-section">
+                    <h2 class="section-title">Verification Requests <span class="badge" id="pendingVerificationsCount">0</span></h2>
+                    <div class="search-filter">
+                        <input type="text" id="verificationSearch" placeholder="Search users...">
+                        <select id="verificationFilter">
+                            <option value="all">All Requests</option>
+                            <option value="pending">Pending</option>
+                            <option value="approved">Approved</option>
+                            <option value="rejected">Rejected</option>
+                        </select>
+                        <button class="refresh-btn" onclick="loadVerifications()">
+                            <i class="fas fa-sync-alt"></i> Refresh
+                        </button>
+                    </div>
+
+                    <div class="verification-list" id="verificationList">
+                        <!-- Verification items will be loaded here -->
+                    </div>
+                </section>
+
+                <!-- User Management Section -->
+                <section id="users" class="content-section">
+                    <h2 class="section-title">User Management</h2>
+                    <div class="search-filter">
+                        <input type="text" id="userSearch" placeholder="Search users...">
+                        <select id="userFilter">
+                            <option value="all">All Users</option>
+                            <option value="verified">Verified</option>
+                            <option value="unverified">Unverified</option>
+                            <option value="active">Active</option>
+                            <option value="inactive">Inactive</option>
+                        </select>
+                        <button class="refresh-btn" onclick="loadUsers()">
+                            <i class="fas fa-sync-alt"></i> Refresh
+                        </button>
+                    </div>
+
+                    <div class="users-list" id="usersList">
+                        <!-- Users will be loaded here -->
+                    </div>
+                </section>
+
+                <!-- Referral Tracking Section -->
+                <section id="referrals" class="content-section">
+                    <h2 class="section-title">Referral Tracking</h2>
+                    
+                    <div class="referral-stats">
+                        <div class="stat-card">
+                            <div class="stat-icon blue">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="totalReferrals">0</h3>
+                                <p>Total Referrals</p>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon green">
+                                <i class="fas fa-rupee-sign"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="referralEarnings">₹0</h3>
+                                <p>Referral Earnings</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="search-filter">
+                        <input type="text" id="referralSearch" placeholder="Search referrals...">
+                        <button class="refresh-btn" onclick="loadReferrals()">
+                            <i class="fas fa-sync-alt"></i> Refresh
+                        </button>
+                    </div>
+
+                    <div class="referral-list" id="referralList">
+                        <!-- Referral data will be loaded here -->
+                    </div>
+                </section>
+
+                <!-- Withdrawal Requests Section -->
+                <section id="withdrawals" class="content-section">
+                    <h2 class="section-title">Withdrawal Requests <span class="badge" id="pendingWithdrawalsCount">0</span></h2>
+                    <div class="search-filter">
+                        <input type="text" id="withdrawalSearch" placeholder="Search withdrawals...">
+                        <select id="withdrawalFilter">
+                            <option value="all">All Requests</option>
+                            <option value="pending">Pending</option>
+                            <option value="approved">Approved</option>
+                            <option value="rejected">Rejected</option>
+                        </select>
+                        <button class="refresh-btn" onclick="loadWithdrawals()">
+                            <i class="fas fa-sync-alt"></i> Refresh
+                        </button>
+                    </div>
+
+                    <div class="withdrawal-list" id="withdrawalList">
+                        <!-- Withdrawal items will be loaded here -->
+                    </div>
+                </section>
+
+                <!-- Ads Management Section -->
+                <section id="ads" class="content-section">
+                    <h2 class="section-title">Ads Management</h2>
+                    <div class="ad-controls">
+                        <button class="add-btn" onclick="showAdForm()">
+                            <i class="fas fa-plus"></i> Add New Ad
+                        </button>
+                        <div class="ad-stats">
+                            <span>Active: <strong id="activeAdCount">0</strong></span>
+                            <span>Pending: <strong id="pendingAdCount">0</strong></span>
+                            <span>Total: <strong id="totalAdCount">0</strong></span>
+                        </div>
+                    </div>
+                    
+                    <div class="ads-grid" id="adsGrid">
+                        <!-- Ads will be loaded here -->
+                    </div>
+                </section>
+
+                <!-- Reports Section -->
+                <section id="reports" class="content-section">
+                    <h2 class="section-title">Reports</h2>
+                    <div class="reports-container">
+                        <div class="report-card">
+                            <h3><i class="fas fa-file-excel"></i> Export Data</h3>
+                            <div class="export-options">
+                                <button class="export-btn" onclick="exportData('users')">
+                                    <i class="fas fa-users"></i> Export Users
+                                </button>
+                                <button class="export-btn" onclick="exportData('transactions')">
+                                    <i class="fas fa-rupee-sign"></i> Export Transactions
+                                </button>
+                                <button class="export-btn" onclick="exportData('withdrawals')">
+                                    <i class="fas fa-wallet"></i> Export Withdrawals
+                                </button>
+                            </div>
+                        </div>
+                        <div class="report-card">
+                            <h3><i class="fas fa-chart-pie"></i> Earnings Report</h3>
+                            <canvas id="earningsReportChart"></canvas>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Settings Section -->
+                <section id="settings" class="content-section">
+                    <h2 class="section-title">Settings</h2>
+                    <div class="settings-form">
+                        <div class="form-group">
+                            <label>Minimum Withdrawal Amount</label>
+                            <input type="number" id="minWithdrawal" value="100" min="50">
+                        </div>
+                        <div class="form-group">
+                            <label>Referral Bonus Amount</label>
+                            <input type="number" id="referralBonus" value="10" min="0">
+                        </div>
+                        <div class="form-group">
+                            <label>Ads Per Day Limit</label>
+                            <input type="number" id="adsLimit" value="10" min="1">
+                        </div>
+                        <div class="form-group">
+                            <label>Earnings Per Ad</label>
+                            <input type="number" id="earningsPerAd" value="2" min="1">
+                        </div>
+                        <button class="save-btn" onclick="saveSettings()">
+                            <i class="fas fa-save"></i> Save Settings
+                        </button>
+                    </div>
+                </section>
+            </div>
+        </div>
+
+        <!-- Notification Panel -->
+        <div class="notification-panel">
+            <div class="notification-header">
+                <h3>Notifications</h3>
+                <div>
+                    <button class="mark-all-read" onclick="markAllAsRead()">Mark all as read</button>
+                    <button class="close-notifications">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="notification-list" id="notificationList">
+                <!-- Notifications will appear here -->
+            </div>
+        </div>
+
+        <!-- Verification Proof Modal -->
+        <div class="modal" id="verificationModal">
+            <div class="modal-content large animate__animated animate__zoomIn">
+                <span class="close-modal">&times;</span>
+                <h2>Verification Proof</h2>
+                <div class="proof-container">
+                    <img id="verificationProofImage" src="" alt="Verification Proof">
+                </div>
+                <div class="proof-details" id="verificationDetails">
+                    <!-- Verification details will appear here -->
+                </div>
+                <div class="proof-actions">
+                    <button class="approve-btn" id="modalVerifyApproveBtn">
+                        <i class="fas fa-check"></i> Approve
+                    </button>
+                    <button class="reject-btn" id="modalVerifyRejectBtn">
+                        <i class="fas fa-times"></i> Reject
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Withdrawal Proof Modal -->
+        <div class="modal" id="withdrawalModal">
+            <div class="modal-content large animate__animated animate__zoomIn">
+                <span class="close-modal">&times;</span>
+                <h2>Withdrawal Details</h2>
+                <div class="proof-details" id="withdrawalDetails">
+                    <!-- Withdrawal details will appear here -->
+                </div>
+                <div class="proof-actions">
+                    <button class="approve-btn" id="modalWithdrawalApproveBtn">
+                        <i class="fas fa-check"></i> Approve
+                    </button>
+                    <button class="reject-btn" id="modalWithdrawalRejectBtn">
+                        <i class="fas fa-times"></i> Reject
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ad Form Modal -->
+        <div class="modal" id="adModal">
+            <div class="modal-content animate__animated animate__zoomIn">
+                <span class="close-modal">&times;</span>
+                <h2>Add New Advertisement</h2>
+                <form id="adForm">
+                    <div class="form-group">
+                        <label>Ad Title</label>
+                        <input type="text" id="adTitle" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Ad Image</label>
+                        <div class="file-upload">
+                            <input type="file" id="adImage" accept="image/*" required>
+                            <label for="adImage" class="upload-btn">
+                                <i class="fas fa-cloud-upload-alt"></i> Choose Image
+                            </label>
+                            <span id="fileName">No file chosen</span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Target URL</label>
+                        <input type="url" id="adUrl" placeholder="https://example.com">
+                    </div>
+                    <div class="form-group">
+                        <label>Duration (days)</label>
+                        <input type="number" id="adDuration" min="1" value="7" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Status</label>
+                        <select id="adStatus">
+                            <option value="active">Active</option>
+                            <option value="pending">Pending</option>
+                            <option value="paused">Paused</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="submit-btn">
+                        <i class="fas fa-upload"></i> Upload Ad
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js"></script>
+    <script src="Admin panel.js"></script>
+</body>
+</html>

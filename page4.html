@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - SKR App</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="page4.css">
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-card">
+            <div class="logo-container">
+                <img src="Logo.png" alt="SKR Logo" class="logo">
+            </div>
+            
+            <h1 class="animate__animated animate__fadeInDown">Welcome Back!</h1>
+            <p class="subtitle animate__animated animate__fadeIn animate__delay-1s">Login to access your dashboard</p>
+            
+            <form id="loginForm" class="animate__animated animate__fadeIn animate__delay-1.5s">
+                <div class="form-group">
+                    <i class="fas fa-user input-icon"></i>
+                    <input type="text" id="loginUsername" required>
+                    <label for="loginUsername">Username or Phone</label>
+                    <div class="underline"></div>
+                </div>
+                
+                <div class="form-group">
+                    <i class="fas fa-lock input-icon"></i>
+                    <input type="password" id="loginPassword" required>
+                    <label for="loginPassword">Password</label>
+                    <i class="fas fa-eye toggle-password" id="togglePassword"></i>
+                    <div class="underline"></div>
+                </div>
+                
+                <div class="form-options">
+                    <div class="remember-me">
+                        <input type="checkbox" id="rememberMe">
+                        <label for="rememberMe">Remember me</label>
+                    </div>
+                    <a href="#" id="forgotPassword">Forgot Password?</a>
+                </div>
+                
+                <button type="submit" class="login-btn animate__animated animate__fadeInUp animate__delay-2s">
+                    <span>Login</span>
+                    <i class="fas fa-arrow-right"></i>
+                </button>
+                
+                <p id="loginError" class="error-message"></p>
+            </form>
+            
+            <div class="alternative-login animate__animated animate__fadeIn animate__delay-2.5s">
+                <p>Or login with</p>
+                <div class="social-icons">
+                    <a href="#" class="social-icon google"><i class="fab fa-google"></i></a>
+                    <a href="#" class="social-icon facebook"><i class="fab fa-facebook-f"></i></a>
+                </div>
+            </div>
+            
+            <p class="signup-link animate__animated animate__fadeIn animate__delay-3s">
+                Don't have an account? <a href="page3.html">Sign up</a>
+            </p>
+        </div>
+    </div>
+
+    <!-- Forgot Password Modal -->
+    <div id="forgotPasswordModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Reset Password</h2>
+            <form id="forgotPasswordForm">
+                <div class="form-group">
+                    <label for="resetPhone"></label>
+                    <input type="tel" id="resetPhone" placeholder="Enter your phone number" required>
+                </div>
+                <button type="submit" class="submit-btn">Send OTP</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="page4.js"></script>
+</body>
+</html>

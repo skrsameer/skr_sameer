@@ -1,0 +1,254 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.slideshow-container {
+    position: relative;
+    width: 100%;
+    max-width: 400px;
+    height: 700px;
+    margin: auto;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+.slide {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 30px;
+    text-align: center;
+    opacity: 0;
+    transition: all 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    transform: scale(0.9);
+    z-index: 1;
+}
+
+.slide.active {
+    opacity: 1;
+    transform: scale(1);
+    z-index: 2;
+}
+
+.slide-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    filter: brightness(0.6);
+    z-index: -1;
+}
+
+.slide-content {
+    width: 100%;
+    color: #10D800;
+    font-weight: bold;
+
+}
+
+.welcome-text {
+    font-size: 24px;
+    font-weight: 300;
+    margin-bottom: 20px;
+    letter-spacing: 2px;
+    font-weight: bold;
+}
+
+h1 {
+    font-size: 42px;
+    margin-bottom: 20px;
+    font-weight: 700;
+    font-weight: bold;
+}
+
+.skr-text {
+    color: red;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.7);
+}
+
+p {
+    font-size: 18px;
+    margin-bottom: 20px;
+    font-weight: 300;
+    font-weight: bold;
+}
+
+.highlight {
+    color: bl;
+    font-weight: bold;
+    margin: 20px 0;
+    font-size: 20px;
+}
+
+
+.image {
+    width: 300px;
+    height: auto;
+    margin-bottom: 30px;
+    filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
+}
+
+.logo {
+    width: 100px;
+    height: auto;
+    margin-bottom: 30px;
+    filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
+}
+
+.ads-image {
+    width: 200px;
+    height: auto;
+    margin: 20px auto;
+    display: block;
+    filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.7));
+    animation: pulse 2s infinite;
+}
+
+.skr-branding {
+    display: flex;
+    flex-direction: column;
+    margin: 30px 0;
+}
+
+.skr-branding span {
+    font-size: 32px;
+    font-weight: bold;
+    color: #FF00D0;
+    line-height: 1.2;
+}
+
+.auth-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 30px;
+}
+
+.login-btn, .signup-btn, .slide-btn {
+    padding: 15px 30px;
+    border: none;
+    border-radius: 50px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.slide-btn {
+    background: linear-gradient(45deg, #FFD700, #FFA500);
+    color: #000;
+    margin-top: 30px;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.login-btn {
+    background-color: transparent;
+    color: black;
+    border: 2px solid #0036FF;
+}
+
+.signup-btn {
+    background: linear-gradient(45deg, #FFD700, #FFA500);
+    color: #000;
+}
+
+.login-btn:hover, .signup-btn:hover, .slide-btn:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(255, 215, 0, 0.4);
+}
+
+.progress-container {
+    width: 100%;
+    height: 6px;
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 5px;
+    margin: 30px 0;
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 100%;
+    width: 0;
+    background: linear-gradient(90deg, #FFD700, #FFA500);
+    border-radius: 5px;
+}
+
+.dots-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 660px;
+}
+
+.dot {
+    width: 12px;
+    height: 12px;
+    margin: 0 5px;
+    border-radius: 50%;
+    background-color: #ccc;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.dot.active {
+    background-color: #6c5ce7;
+}
+
+.greeting {
+    font-size: 36px;
+    color: #FFD700;
+    margin-bottom: 30px;
+    animation: bounce 2s infinite;
+}
+
+.scroll-container {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  border: 1px solid #ddd;
+  height: 100px;
+}
+
+.scroll-content {
+  display: flex;
+  position: absolute;
+  white-space: nowrap;
+  animation: scrollRightToLeft 20s linear infinite;
+}
+
+.item {
+  padding: 20px 40px;
+  background: #f0f0f0;
+  margin: 10px;
+  border-radius: 5px;
+  flex-shrink: 0;
+}
+
+@keyframes scrollRightToLeft {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create New Account - SKR</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="page3.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <img src="Logo.png" alt="SKR Logo" class="logo">
+            <h1>Create New Account</h1>
+        </div>
+        
+        <form id="registrationForm">
+            <div class="form-group">
+                <label for="username">Username *</label>
+                <input type="text" id="username" placeholder="Enter unique username" required>
+                <i class="fas fa-user input-icon"></i>
+            </div>
+            
+            <div class="form-group">
+                <label for="name">Full Name *</label>
+                <input type="text" id="name" placeholder="Enter your full name" required>
+                <i class="fas fa-id-card input-icon"></i>
+            </div>
+            
+            <div class="form-group">
+                <label for="phone">Mobile Number *</label>
+                <div class="phone-input">
+                    <span>+91</span>
+                    <input type="tel" id="phone" placeholder="Enter 10-digit number" required maxlength="10">
+                    <button type="button" id="sendOtpBtn" class="otp-btn">
+                        <span id="btnText">Send OTP</span>
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+                <p id="phoneError" class="error-message"></p>
+            </div>
+            
+            <div class="form-group otp-group" id="otpGroup">
+                <label for="otp">OTP Verification *</label>
+                <div class="otp-input-container">
+                    <input type="text" id="otp" placeholder="Enter 6-digit OTP" maxlength="6">
+                    <i class="fas fa-shield-alt input-icon"></i>
+                </div>
+                <p id="otpError" class="error-message"></p>
+                <p id="otpTimer" class="timer"></p>
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Password *</label>
+                <div class="password-container">
+                    <input type="password" id="password" placeholder="Create password (min 8 chars)" required>
+                    <i class="fas fa-lock input-icon"></i>
+                    <i class="fas fa-eye toggle-password" id="togglePassword"></i>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="confirmPassword">Confirm Password *</label>
+                <div class="password-container">
+                    <input type="password" id="confirmPassword" placeholder="Re-enter your password" required>
+                    <i class="fas fa-lock input-icon"></i>
+                    <i class="fas fa-eye toggle-password" id="toggleConfirmPassword"></i>
+                </div>
+                <p id="passwordError" class="error-message"></p>
+            </div>
+            
+            <div class="form-group checkbox-group">
+                <input type="checkbox" id="terms" required>
+                <label for="terms">I agree to the <a href="#" id="termsLink">Terms of Service</a></label>
+            </div>
+            
+            <button type="submit" id="continueBtn" class="submit-btn" disabled>
+                <span>Continue</span>
+                <i class="fas fa-arrow-right"></i>
+            </button>
+        </form>
+    </div>
+
+    <!-- Terms of Service Modal -->
+    <div id="termsModal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <h2>Terms of Service</h2>
+            <div class="terms-content">
+                <!-- Your terms content here -->
+                <p>1. You must be at least 18 years old to use this service.</p>
+                <p>2. Each mobile number can only be used for one account.</p>
+                <p>3. You agree to receive OTP and important account notifications via SMS.</p>
+                <p>4. Any fraudulent activity will result in account termination.</p>
+                <p>5. ₹21 verification fee is non-refundable.</p>
+                <p>6. SKR reserves the right to modify these terms at any time.</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="page3.js"></script>
+</body>

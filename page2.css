@@ -1,0 +1,164 @@
+/* Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.container {
+    width: 100%;
+    max-width: 400px;
+}
+
+.card {
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    padding: 30px;
+    position: relative;
+    transform-style: preserve-3d;
+    animation: fadeIn 0.5s ease-out;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.logo {
+    width: 120px;
+    height: auto;
+    margin-bottom: 20px;
+}
+
+h2 {
+    color: #333;
+    font-size: 18px;
+    text-align: center;
+    margin-bottom: 20px;
+    font-weight: 500;
+}
+
+.referral-section {
+    margin: 30px 0;
+}
+
+.referral-label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 16px;
+    color: #000;
+    font-weight: 600;
+    text-align: center;
+}
+
+.referral-input {
+    width: 100%;
+    padding: 15px;
+    border: 2px solid #eee;
+    border-radius: 10px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    background: #fafafa;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.referral-input:focus {
+    border-color: #6c5ce7;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.2);
+}
+
+.referral-name {
+    height: 20px;
+    margin-top: 10px;
+    font-size: 14px;
+    color: #6c5ce7;
+    font-weight: 600;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.actions {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 30px;
+}
+
+.btn {
+    padding: 15px;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+}
+
+.btn.primary {
+    background: linear-gradient(135deg, #6c5ce7 0%, #a29bfe 100%);
+    color: white;
+    box-shadow: 0 4px 15px rgba(108, 92, 231, 0.3);
+}
+
+.btn.secondary {
+    background: transparent;
+    color: #6c5ce7;
+    border: 2px solid #6c5ce7;
+}
+
+.btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 7px 20px rgba(108, 92, 231, 0.4);
+}
+
+.btn:active {
+    transform: translateY(1px);
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeOut {
+    to { opacity: 0; transform: translateY(50px); }
+}
+
+.animate-btn {
+    opacity: 0;
+    animation: fadeIn 0.8s ease-out forwards;
+    animation-delay: 0.5s;
+}
+
+/* Glow Effect */
+.card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 5px;
+    background: linear-gradient(90deg, #6c5ce7, #a29bfe, #6c5ce7);
+    background-size: 200% auto;
+    animation: gradientGlow 3s linear infinite;
+}
+
+@keyframes gradientGlow {
+    0% { background-position: 0% center; }
+    100% { background-position: 200% center; }
+}
