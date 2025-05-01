@@ -308,4 +308,28 @@ document.addEventListener('DOMContentLoaded', function() {
         // Redirect to verification page with animation
         redirectToPage('page3.html');
     });
+
+async function sendOtpToPhone(phone, otp) {
+  try {
+    const response = await fetch('http://localhost:3000/api/send-otp', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ mobile: phone })
+    });
+    
+    const result = await response.json();
+    
+    if (result.success) {
+      console.log('OTP sent successfully');
+      return true;
+    } else {
+      showError(phoneError, 'Failed to send OTP');
+      return false;
+    }
+  } catch (error) {
+    console.error('API Error:', error);
+    showError(phoneError, 'Network error. Please try again.');
+    return false;
+  }
+}
 });
