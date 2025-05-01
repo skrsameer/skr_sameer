@@ -7,14 +7,41 @@ document.addEventListener('DOMContentLoaded', function() {
     const otpGroup = document.getElementById('otpGroup');
     const otpError = document.getElementById('otpError');
     const phoneError = document.getElementById('phoneError');
+    const passwordError = document.getElementById('passwordError');
     const continueBtn = document.getElementById('continueBtn');
     const otpTimer = document.getElementById('otpTimer');
+    const termsLink = document.getElementById('termsLink');
+    const modal = document.getElementById('termsModal');
+    const closeModal = document.querySelector('.close-modal');
+    const togglePassword = document.getElementById('togglePassword');
+    const toggleConfirmPassword = document.getElementById('toggleConfirmPassword');
+    const passwordInput = document.getElementById('password');
+    const confirmPasswordInput = document.getElementById('confirmPassword');
+    const referralInput = document.getElementById('referral-code');
+    const referralName = document.getElementById('referral-name');
 
     // Variables
     let generatedOtp = '';
     let otpExpiryTime = 0;
     let otpTimerInterval;
     let isPhoneVerified = false;
+    const referralCodes = {
+        'SKR100': 'John Sharma',
+        'SKR200': 'Priya Patel',
+        'SKR300': 'Rahul Gupta',
+        'SKR400': 'Anjali Singh',
+        'SKR500': 'Vikram Kumar'
+    };
+
+    // Initialize
+    continueBtn.disabled = true;
+    otpGroup.style.display = 'none';
+
+    // Check if phone number is already registered
+    function isPhoneRegistered(phone) {
+        const users = JSON.parse(localStorage.getItem('users')) || [];
+        return users.some(user => user.phone === phone);
+    }
 
     // Generate 6-digit OTP
     function generateOtp() {
@@ -24,45 +51,23 @@ document.addEventListener('DOMContentLoaded', function() {
     // Send OTP via SMS API
     async function sendOtpToPhone(phone, otp) {
         try {
-            // Using MSG91 API (replace with your actual API key)
-            const response = await fetch('https://api.msg91.com/api/v5/otp', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'authkey': 'YOUR_MSG91_AUTH_KEY' // Replace with actual key
-                },
-                body: JSON.stringify({
-                    mobile: `91${phone}`, // Indian country code
-                    template_id: 'YOUR_TEMPLATE_ID', // Approved DLT template
-                    otp: otp,
-                    otp_expiry: 5 // 5 minutes expiry
-                })
-            });
-
-            const result = await response.json();
+            // In production, use actual SMS API like MSG91/Twilio
+            console.log(`OTP sent to +91${phone}: ${otp}`); // Remove in production
             
-            if (result.type === 'success') {
-                // Store OTP and expiry time
-                generatedOtp = otp;
-                otpExpiryTime = Date.now() + 5 * 60 * 1000;
-                
-                // Show OTP field and start timer
-                otpGroup.style.display = 'block';
-                startOtpTimer();
-                
-                // Update button text
-                document.getElementById('btnText').textContent = 'Resend OTP';
-                
-                console.log(`OTP sent successfully to ${phone}`);
-                return true;
-            } else {
-                console.error('OTP send failed:', result.message);
-                showError(phoneError, 'Failed to send OTP. Please try again.');
-                return false;
-            }
+            // Simulate API delay
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            
+            // Store OTP and expiry time (5 minutes from now)
+            generatedOtp = otp;
+            otpExpiryTime = Date.now() + 5 * 60 * 1000;
+            
+            // Show OTP field and start timer
+            otpGroup.style.display = 'block';
+            startOtpTimer();
+            
+            return true;
         } catch (error) {
-            console.error('OTP API error:', error);
-            showError(phoneError, 'Network error. Please check your connection.');
+            console.error('OTP send error:', error);
             return false;
         }
     }
@@ -108,6 +113,25 @@ document.addEventListener('DOMContentLoaded', function() {
         return true;
     }
 
+    // Validate password
+    function validatePassword() {
+        const password = passwordInput.value;
+        const confirmPassword = confirmPasswordInput.value;
+        
+        if (password.length < 8) {
+            showError(passwordError, 'Password must be at least 8 characters');
+            return false;
+        }
+        
+        if (password !== confirmPassword) {
+            showError(passwordError, 'Passwords do not match');
+            return false;
+        }
+        
+        hideError(passwordError);
+        return true;
+    }
+
     // Validate phone number
     function validatePhoneNumber(phone) {
         const phoneRegex = /^[6-9]\d{9}$/;
@@ -115,8 +139,28 @@ document.addEventListener('DOMContentLoaded', function() {
             showError(phoneError, 'Please enter a valid 10-digit Indian number');
             return false;
         }
+        
+        if (isPhoneRegistered(phone)) {
+            showError(phoneError, 'This number is already registered');
+            return false;
+        }
+        
         hideError(phoneError);
         return true;
+    }
+
+    // Validate referral code
+    function validateReferralCode(code) {
+        if (!code) return true; // Optional field
+        
+        const validCode = referralCodes[code.toUpperCase()];
+        if (validCode) {
+            referralName.textContent = `Referred by: ${validCode}`;
+            return true;
+        }
+        
+        referralName.textContent = 'Invalid referral code';
+        return false;
     }
 
     // Show error message
@@ -134,6 +178,25 @@ document.addEventListener('DOMContentLoaded', function() {
         element.style.display = 'none';
     }
 
+    // Toggle password visibility
+    function togglePasswordVisibility(input, icon) {
+        if (input.type === 'password') {
+            input.type = 'text';
+            icon.classList.replace('fa-eye', 'fa-eye-slash');
+        } else {
+            input.type = 'password';
+            icon.classList.replace('fa-eye-slash', 'fa-eye');
+        }
+    }
+
+    // Redirect with animation
+    function redirectToPage(page) {
+        document.querySelector('.card').style.animation = 'fadeOut 0.5s ease-out forwards';
+        setTimeout(() => {
+            window.location.href = page;
+        }, 500);
+    }
+
     // Event Listeners
     sendOtpBtn.addEventListener('click', async function() {
         const phone = phoneInput.value.trim();
@@ -149,34 +212,100 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Re-enable button
         this.disabled = false;
-        if (!otpSent) {
-            document.getElementById('btnText').textContent = 'Send OTP';
-        }
+        document.getElementById('btnText').textContent = otpSent ? 'Resend OTP' : 'Send OTP';
     });
 
     otpInput.addEventListener('input', function() {
         const otp = this.value.trim();
-        
         if (otp.length === 6) {
-            continueBtn.disabled = !validateOtp(otp);
-        } else {
-            continueBtn.disabled = true;
+            validateOtp(otp);
+        }
+    });
+
+    passwordInput.addEventListener('input', validatePassword);
+    confirmPasswordInput.addEventListener('input', validatePassword);
+
+    referralInput.addEventListener('input', function() {
+        validateReferralCode(this.value.trim());
+    });
+
+    togglePassword.addEventListener('click', function() {
+        togglePasswordVisibility(passwordInput, this);
+    });
+
+    toggleConfirmPassword.addEventListener('click', function() {
+        togglePasswordVisibility(confirmPasswordInput, this);
+    });
+
+    termsLink.addEventListener('click', function(e) {
+        e.preventDefault();
+        modal.style.display = 'block';
+    });
+
+    closeModal.addEventListener('click', function() {
+        modal.style.display = 'none';
+    });
+
+    window.addEventListener('click', function(e) {
+        if (e.target === modal) {
+            modal.style.display = 'none';
         }
     });
 
     form.addEventListener('submit', function(e) {
         e.preventDefault();
         
-        if (!isPhoneVerified) {
+        // Validate all fields
+        const username = document.getElementById('username').value.trim();
+        const name = document.getElementById('name').value.trim();
+        const phone = phoneInput.value.trim();
+        const otp = otpInput.value.trim();
+        const password = passwordInput.value;
+        const referralCode = referralInput.value.trim();
+        const termsChecked = document.getElementById('terms').checked;
+        
+        if (!username || !name || !phone || !otp || !password || !termsChecked) {
+            alert('Please fill all required fields');
+            return;
+        }
+        
+        if (!isPhoneVerified || !validateOtp(otp)) {
             showError(otpError, 'Please verify your phone number with OTP');
             return;
         }
         
-        // Proceed with registration
-        alert('Registration successful!');
-        // window.location.href = 'dashboard.html';
-    });
+        if (!validatePassword()) return;
+        
+        if (referralCode && !validateReferralCode(referralCode)) {
+            return;
+        }
 
-    // For testing purposes only (remove in production)
-    console.warn('Development mode: OTP will be logged to console');
+        // Create user object
+        const user = {
+            username,
+            name,
+            phone,
+            password: btoa(password), // Simple encoding (use proper hashing in production)
+            isVerified: false,
+            balance: 0,
+            joinedDate: new Date().toISOString(),
+            referralCode: `SKR${Math.floor(1000 + Math.random() * 9000)}${username.slice(0, 3).toUpperCase()}`,
+            referredBy: referralCode ? referralCodes[referralCode.toUpperCase()] : null
+        };
+        
+        // Save user to localStorage
+        let users = JSON.parse(localStorage.getItem('users')) || [];
+        users.push(user);
+        localStorage.setItem('users', JSON.stringify(users));
+        
+        // Save current user session
+        sessionStorage.setItem('currentUser', JSON.stringify({
+            username,
+            phone,
+            isLoggedIn: true
+        }));
+        
+        // Redirect to verification page with animation
+        redirectToPage('page3.html');
+    });
 });
