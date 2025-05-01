@@ -1,22 +1,11 @@
 document.addEventListener('DOMContentLoaded', function() {
     // DOM elements
     const referralInput = document.getElementById('referral-code');
-    const referralName = document.getElementById('referral-name'); // Fixed typo in ID
+    const referralName = document.getElementById('referral-name');
     const continueBtn = document.getElementById('continue-btn');
     const skipBtn = document.getElementById('skip-btn');
 
-    // Check if user is returning (has visited before)
-    const isReturningUser = localStorage.getItem('hasVisitedBefore');
-    
-    // If returning user, redirect to login page
-    if (isReturningUser) {
-        redirectToPage('page3.html');
-        return;
-    } else {
-        localStorage.setItem('hasVisitedBefore', 'true');
-    }
-
-    // Sample referral codes (replace with actual fetch in production)
+    // Sample referral codes (in production, fetch from admin backend)
     const referralCodes = {
         'SKR100': 'John Sharma',
         'SKR200': 'Priya Patel',
@@ -32,62 +21,66 @@ document.addEventListener('DOMContentLoaded', function() {
         timestamp: new Date().toISOString()
     };
 
+    // Initially disable continue button
+    continueBtn.disabled = true;
+
     // Validate referral code in real-time
     referralInput.addEventListener('input', function() {
         const code = this.value.trim().toUpperCase();
         
-        if (referralCodes[code]) {
+        if (code && referralCodes[code]) {
+            // Valid code entered
             referralName.textContent = `Referred by: ${referralCodes[code]}`;
             referralData.code = code;
             referralData.referrer = referralCodes[code];
+            
+            // Enable continue button
+            continueBtn.disabled = false;
             
             // Add animation
             referralName.style.animation = 'none';
             void referralName.offsetWidth; // Trigger reflow
             referralName.style.animation = 'fadeIn 0.5s ease-out';
         } else {
+            // Invalid or empty code
             referralName.textContent = '';
             referralData.code = '';
             referralData.referrer = '';
+            
+            // Disable continue button
+            continueBtn.disabled = true;
         }
     });
 
-    // Continue button click handler
+    // Continue button click handler (only works with valid referral code)
     continueBtn.addEventListener('click', function() {
-        // Validate if referral code was entered but not found
-        if (referralInput.value.trim() && !referralData.code) {
-            alert('Invalid referral code. Please enter a valid code or click Skip.');
+        if (!referralData.code) {
+            alert('Please enter a valid referral code to continue.');
             return;
         }
         
-        // Save to localStorage and sessionStorage
+        // Save referral data
         localStorage.setItem('referralData', JSON.stringify(referralData));
         sessionStorage.setItem('currentReferral', JSON.stringify(referralData));
         
-        // Animate button click
+        // Animate and redirect
         animateButton(this);
-        
-        // Redirect to next page
-        setTimeout(() => {
-            redirectToPage('page3.html');
-        }, 500);
+        redirectToPage('page3.html');
     });
 
-    // Skip button click handler
+    // Skip button click handler (works independently)
     skipBtn.addEventListener('click', function() {
         // Mark as skipped
         referralData.code = 'SKIPPED';
         referralData.referrer = '';
+        
+        // Save referral data
         localStorage.setItem('referralData', JSON.stringify(referralData));
         sessionStorage.setItem('currentReferral', JSON.stringify(referralData));
         
-        // Animate button click
+        // Animate and redirect
         animateButton(this);
-        
-        // Redirect to next page
-        setTimeout(() => {
-            redirectToPage('page3.html');
-        }, 500);
+        redirectToPage('page3.html');
     });
 
     // Helper function to animate buttons
