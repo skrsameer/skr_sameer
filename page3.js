@@ -1,11 +1,12 @@
-// Firebase Configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-    apiKey: "AIzaSyD-Bsgg9aihEA4IQfCJwHK1Q452hEUv1_w",
-    authDomain: "skr-otp.firebaseapp.com",
-    projectId: "skr-otp",
-    storageBucket: "skr-otp.firebasestorage.app",
-    messagingSenderId: "370395566351",
-    appId: "1:370395566351:web:06b3a967f2e04db7672e7a"
+  apiKey: "AIzaSyD-Bsgg9aihEA4IQfCJwHK1Q452hEUv1_w",
+  authDomain: "skr-otp.firebaseapp.com",
+  projectId: "skr-otp",
+  storageBucket: "skr-otp.firebasestorage.app",
+  messagingSenderId: "370395566351",
+  appId: "1:370395566351:web:06b3a967f2e04db7672e7a",
+  measurementId: "G-MJQK7VQD12"
 };
 
 // Initialize Firebase
