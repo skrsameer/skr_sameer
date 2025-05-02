@@ -1,39 +1,30 @@
-// server.js
-require('dotenv').config();
-const express = require('express');
-const axios = require('axios');
-const app = express();
+let confirmationResult;
 
-app.use(express.json());
+// OTP भेजें
+function sendOTP() {
+  const phone = document.getElementById('phone').value;
+  const appVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container');
 
-// OTP भेजने का API
-app.post('/api/send-otp', async (req, res) => {
-  try {
-    const { mobile } = req.body;
-    const otp = Math.floor(100000 + Math.random() * 900000);
-    
-    const response = await axios.post('https://api.msg91.com/api/v5/otp', {
-      mobile: `91${mobile}`,
-      template_id: process.env.MSG91_TEMPLATE_ID,
-      otp: otp,
-      otp_expiry: 5 // 5 मिनट
-    }, {
-      headers: { 'authkey': process.env.MSG91_AUTH_KEY }
+  firebase.auth().signInWithPhoneNumber(phone, appVerifier)
+    .then((result) => {
+      confirmationResult = result;
+      document.getElementById('otp-div').style.display = 'block';
+      alert("OTP भेजा गया!");
+    })
+    .catch((error) => {
+      alert("त्रुटि: " + error.message);
     });
-    
-    res.json({ success: true, otp: otp });
-  } catch (error) {
-    console.error('OTP Error:', error.response?.data || error.message);
-    res.status(500).json({ success: false });
-  }
-});
+}
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-
-// server.js में एड करें
-const cors = require('cors');
-app.use(cors({
-  origin: 'https://skrsameer.github.io/Earn-With-SKR-/'
-}));
-
+// OTP वेरिफाई करें
+function verifyOTP() {
+  const otp = document.getElementById('otp-code').value;
+  confirmationResult.confirm(otp)
+    .then((userCredential) => {
+      alert("सफलतापूर्वक वेरिफाई हुआ!");
+      console.log("User:", userCredential.user);
+    })
+    .catch((error) => {
+      alert("गलत OTP! फिर से प्रयास करें");
+    });
+}
