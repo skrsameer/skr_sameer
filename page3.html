@@ -1,42 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
-<!-- Firebase SDK -->
-<script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
-
-<script>
-  // अपना Firebase कॉन्फिग (Project Settings > Your Apps से लें)
-  // Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: "AIzaSyD-Bsgg9aihEA4IQfCJwHK1Q452hEUv1_w",
-  authDomain: "skr-otp.firebaseapp.com",
-  projectId: "skr-otp",
-  storageBucket: "skr-otp.firebasestorage.app",
-  messagingSenderId: "370395566351",
-  appId: "1:370395566351:web:06b3a967f2e04db7672e7a",
-  measurementId: "G-MJQK7VQD12"
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
-  firebase.initializeApp(firebaseConfig);
-</script>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create New Account - SKR</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <link rel="stylesheet" href="page3.css">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
@@ -44,20 +13,20 @@ const analytics = getAnalytics(app);
             <img src="Logo.png" alt="SKR Logo" class="logo">
             <h1>Create New Account</h1>
         </div>
-        
+
         <form id="registrationForm">
             <div class="form-group">
                 <label for="username">Username *</label>
                 <input type="text" id="username" placeholder="Enter unique username" required>
                 <i class="fas fa-user input-icon"></i>
             </div>
-            
+
             <div class="form-group">
                 <label for="name">Full Name *</label>
                 <input type="text" id="name" placeholder="Enter your full name" required>
                 <i class="fas fa-id-card input-icon"></i>
             </div>
-            
+
             <div class="form-group">
                 <label for="phone">Mobile Number *</label>
                 <div class="phone-input">
@@ -69,15 +38,16 @@ const analytics = getAnalytics(app);
                     </button>
                 </div>
                 <p id="phoneError" class="error-message"></p>
+                <div id="recaptcha-container"></div>
             </div>
-            
+
             <div class="form-group" id="otpGroup" style="display:none;">
-  <label for="otp">OTP</label>
-  <input type="text" id="otp" maxlength="6" placeholder="Enter 6-digit OTP">
-  <div id="otpError" class="error-message"></div>
-  <div id="otpTimer"></div>
-</div>
-            
+                <label for="otp">OTP *</label>
+                <input type="text" id="otp" maxlength="6" placeholder="Enter 6-digit OTP" required>
+                <p id="otpError" class="error-message"></p>
+                <p id="otpTimer" class="timer"></p>
+            </div>
+
             <div class="form-group">
                 <label for="password">Password *</label>
                 <div class="password-container">
@@ -86,7 +56,7 @@ const analytics = getAnalytics(app);
                     <i class="fas fa-eye toggle-password" id="togglePassword"></i>
                 </div>
             </div>
-            
+
             <div class="form-group">
                 <label for="confirmPassword">Confirm Password *</label>
                 <div class="password-container">
@@ -96,12 +66,12 @@ const analytics = getAnalytics(app);
                 </div>
                 <p id="passwordError" class="error-message"></p>
             </div>
-            
+
             <div class="form-group checkbox-group">
                 <input type="checkbox" id="terms" required>
                 <label for="terms">I agree to the <a href="#" id="termsLink">Terms of Service</a></label>
             </div>
-            
+
             <button type="submit" id="continueBtn" class="submit-btn" disabled>
                 <span>Continue</span>
                 <i class="fas fa-arrow-right"></i>
@@ -109,23 +79,22 @@ const analytics = getAnalytics(app);
         </form>
     </div>
 
-    <!-- Terms of Service Modal -->
+    <!-- Terms Modal -->
     <div id="termsModal" class="modal">
         <div class="modal-content">
             <span class="close-modal">&times;</span>
             <h2>Terms of Service</h2>
             <div class="terms-content">
-                <!-- Your terms content here -->
                 <p>1. You must be at least 18 years old to use this service.</p>
                 <p>2. Each mobile number can only be used for one account.</p>
                 <p>3. You agree to receive OTP and important account notifications via SMS.</p>
-                <p>4. Any fraudulent activity will result in account termination.</p>
-                <p>5. ₹21 verification fee is non-refundable.</p>
-                <p>6. SKR reserves the right to modify these terms at any time.</p>
             </div>
         </div>
     </div>
 
-    <script src="page3.js"></script>
-    <script src="Server.js"></script>
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
+    <script src="app.js"></script>
 </body>
+</html>
