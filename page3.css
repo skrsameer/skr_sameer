@@ -137,6 +137,28 @@ input:focus {
     font-size: 16px;
 }
 
+.password-strength {
+    margin-top: 8px;
+    height: 5px;
+    background: #f0f0f0;
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.strength-meter {
+    height: 100%;
+    width: 0%;
+    background: #e74c3c;
+    transition: width 0.3s, background 0.3s;
+}
+
+.strength-text {
+    display: block;
+    font-size: 12px;
+    margin-top: 5px;
+    color: #888;
+}
+
 .checkbox-group {
     display: flex;
     align-items: center;
@@ -171,6 +193,10 @@ input:focus {
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
 }
 
 .submit-btn:disabled {
@@ -210,6 +236,7 @@ input:focus {
     border-radius: 10px;
     width: 90%;
     max-width: 500px;
+    position: relative;
 }
 
 .close-modal {
@@ -223,8 +250,8 @@ input:focus {
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes shake {
@@ -239,4 +266,33 @@ input:focus {
 
 #recaptcha-container {
     margin: 10px 0;
+    display: none;
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+    .container {
+        padding: 20px;
+    }
+    
+    .phone-input {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .phone-input span {
+        border-radius: 8px 8px 0 0;
+        border-right: 1px solid #ddd;
+        border-bottom: none;
+        text-align: center;
+    }
+    
+    .phone-input input {
+        border-radius: 0 0 8px 8px;
+    }
+    
+    .otp-btn {
+        margin-left: 0;
+        margin-top: 10px;
+    }
 }
