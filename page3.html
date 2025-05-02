@@ -1,6 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
+
+<script>
+  // अपना Firebase कॉन्फिग (Project Settings > Your Apps से लें)
+  const firebaseConfig = {
+    apiKey: "AIzaSyABCD...",
+    authDomain: "your-project.firebaseapp.com",
+    projectId: "your-project-id",
+    appId: "1:123456789:web:abc123def456"
+  };
+  firebase.initializeApp(firebaseConfig);
+</script>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Create New Account - SKR</title>
