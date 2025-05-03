@@ -6,12 +6,14 @@
     <title>Create New Account - SKR</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="page3.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="container">
         <div class="header">
             <img src="Logo.png" alt="SKR Logo" class="logo">
             <h1>Create New Account</h1>
+            <p class="subtitle">Join our community today</p>
         </div>
 
         <form id="registrationForm">
@@ -39,12 +41,15 @@
                     </button>
                 </div>
                 <p id="phoneError" class="error-message"></p>
-               <div id="recaptcha-container"></div>
+                <div id="recaptcha-container"></div>
             </div>
 
             <div class="form-group" id="otpGroup" style="display:none;">
                 <label for="otp">OTP *</label>
-                <input type="text" id="otp" maxlength="6" placeholder="Enter 6-digit OTP" required>
+                <div class="otp-input-container">
+                    <input type="text" id="otp" maxlength="6" placeholder="Enter 6-digit OTP" required>
+                    <div class="otp-loader" id="otpLoader"></div>
+                </div>
                 <p id="otpError" class="error-message"></p>
                 <p id="otpTimer" class="timer"></p>
             </div>
@@ -82,6 +87,10 @@
                 <i class="fas fa-arrow-right"></i>
             </button>
         </form>
+
+        <div class="footer">
+            <p>Already have an account? <a href="#">Sign In</a></p>
+        </div>
     </div>
 
     <!-- Terms Modal -->
@@ -93,7 +102,9 @@
                 <p>1. You must be at least 18 years old to use this service.</p>
                 <p>2. Each mobile number can only be used for one account.</p>
                 <p>3. You agree to receive OTP and important account notifications via SMS.</p>
+                <p>4. We respect your privacy and will never share your personal information.</p>
             </div>
+            <button class="modal-close-btn">I Understand</button>
         </div>
     </div>
 
@@ -101,6 +112,5 @@
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
     <script src="page3.js"></script>
-    <script src="firebace.js"></script>
 </body>
 </html>
