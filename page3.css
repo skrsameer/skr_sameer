@@ -1,3 +1,4 @@
+/* Global Reset and Base Styles */
 * {
     margin: 0;
     padding: 0;
@@ -12,8 +13,10 @@ body {
     align-items: center;
     min-height: 100vh;
     padding: 20px;
+    line-height: 1.6;
 }
 
+/* Main Container Styles */
 .container {
     background: white;
     border-radius: 15px;
@@ -24,6 +27,7 @@ body {
     animation: fadeIn 0.5s ease-out;
 }
 
+/* Header Section */
 .header {
     text-align: center;
     margin-bottom: 30px;
@@ -32,6 +36,7 @@ body {
 .logo {
     width: 100px;
     margin-bottom: 15px;
+    height: auto;
 }
 
 h1 {
@@ -41,6 +46,7 @@ h1 {
     margin-bottom: 20px;
 }
 
+/* Form Elements */
 .form-group {
     margin-bottom: 20px;
     position: relative;
@@ -65,12 +71,14 @@ input[type="password"] {
     transition: all 0.3s;
 }
 
+/* Input Focus State */
 input:focus {
     border-color: #6c5ce7;
     outline: none;
     box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.2);
 }
 
+/* Input Icons */
 .input-icon {
     position: absolute;
     left: 15px;
@@ -79,6 +87,7 @@ input:focus {
     font-size: 16px;
 }
 
+/* Phone Input Specific Styles */
 .phone-input {
     display: flex;
     align-items: center;
@@ -91,6 +100,7 @@ input:focus {
     border-right: none;
     border-radius: 8px 0 0 8px;
     font-size: 15px;
+    white-space: nowrap;
 }
 
 .phone-input input {
@@ -99,6 +109,7 @@ input:focus {
     padding-left: 15px;
 }
 
+/* OTP Button Styles */
 .otp-btn {
     margin-left: 10px;
     padding: 12px 15px;
@@ -111,7 +122,9 @@ input:focus {
     transition: all 0.3s;
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 8px;
+    min-width: 100px;
 }
 
 .otp-btn:hover {
@@ -122,8 +135,11 @@ input:focus {
 .otp-btn:disabled {
     background: #ccc;
     cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
 }
 
+/* Password Field Container */
 .password-container {
     position: relative;
 }
@@ -135,8 +151,12 @@ input:focus {
     color: #888;
     cursor: pointer;
     font-size: 16px;
+    background: none;
+    border: none;
+    padding: 0;
 }
 
+/* Password Strength Meter */
 .password-strength {
     margin-top: 8px;
     height: 5px;
@@ -157,11 +177,13 @@ input:focus {
     font-size: 12px;
     margin-top: 5px;
     color: #888;
+    text-align: right;
 }
 
+/* Terms Checkbox */
 .checkbox-group {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     margin: 25px 0;
 }
 
@@ -169,19 +191,27 @@ input:focus {
     margin-right: 10px;
     width: 16px;
     height: 16px;
+    margin-top: 2px;
 }
 
 .checkbox-group label {
     margin-bottom: 0;
     font-size: 14px;
+    flex: 1;
 }
 
 #termsLink {
     color: #6c5ce7;
     text-decoration: none;
     font-weight: 600;
+    transition: color 0.2s;
 }
 
+#termsLink:hover {
+    text-decoration: underline;
+}
+
+/* Submit Button */
 .submit-btn {
     width: 100%;
     padding: 15px;
@@ -199,25 +229,36 @@ input:focus {
     gap: 10px;
 }
 
+.submit-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(108, 92, 231, 0.4);
+}
+
 .submit-btn:disabled {
     background: #ccc;
     cursor: not-allowed;
+    opacity: 0.7;
 }
 
+/* Error Messages */
 .error-message {
     color: #e74c3c;
     font-size: 13px;
     margin-top: 5px;
     display: none;
+    animation: fadeIn 0.3s ease-out;
 }
 
+/* OTP Timer */
 .timer {
     color: #e67e22;
     font-size: 13px;
     margin-top: 5px;
     font-weight: 500;
+    text-align: right;
 }
 
+/* Modal Styles */
 .modal {
     display: none;
     position: fixed;
@@ -227,6 +268,7 @@ input:focus {
     width: 100%;
     height: 100%;
     background-color: rgba(0,0,0,0.5);
+    animation: fadeIn 0.3s ease-out;
 }
 
 .modal-content {
@@ -237,6 +279,9 @@ input:focus {
     width: 90%;
     max-width: 500px;
     position: relative;
+    box-shadow: 0 5px 30px rgba(0,0,0,0.3);
+    max-height: 80vh;
+    overflow-y: auto;
 }
 
 .close-modal {
@@ -247,10 +292,22 @@ input:focus {
     font-size: 28px;
     font-weight: bold;
     cursor: pointer;
+    transition: color 0.2s;
 }
 
+.close-modal:hover {
+    color: #333;
+}
+
+/* OTP Group */
+.otp-group {
+    display: none;
+    animation: fadeIn 0.5s ease-out;
+}
+
+/* Animations */
 @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
+    from { opacity: 0; transform: translateY(10px); }
     to { opacity: 1; transform: translateY(0); }
 }
 
@@ -264,38 +321,69 @@ input:focus {
     animation: shake 0.4s ease-in-out;
 }
 
+/* reCAPTCHA Container */
 #recaptcha-container {
     margin: 10px 0;
     display: none;
+    min-height: 78px;
 }
 
-/* Responsive adjustments */
+/* Responsive Design */
 @media (max-width: 480px) {
     .container {
         padding: 20px;
     }
-    
+
     .phone-input {
         flex-direction: column;
         align-items: stretch;
     }
-    
+
     .phone-input span {
         border-radius: 8px 8px 0 0;
         border-right: 1px solid #ddd;
         border-bottom: none;
         text-align: center;
     }
-    
+
     .phone-input input {
         border-radius: 0 0 8px 8px;
     }
-    
+
     .otp-btn {
         margin-left: 0;
         margin-top: 10px;
+        width: 100%;
+    }
+
+    .modal-content {
+        margin: 10% auto;
+        padding: 20px;
     }
 }
-#recaptcha-container {
-    display: none; /* यह reCAPTCHA को छुपाएगा */
+
+/* Accessibility Improvements */
+input:focus-visible {
+    outline: 2px solid #6c5ce7;
+    outline-offset: 2px;
+}
+
+button:focus-visible {
+    outline: 2px solid #6c5ce7;
+    outline-offset: 2px;
+}
+
+/* Loading State */
+.loading-spinner {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-radius: 50%;
+    border-top-color: white;
+    animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
 }
