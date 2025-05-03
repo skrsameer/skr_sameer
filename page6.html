@@ -10,7 +10,28 @@
     <link rel="stylesheet" href="page6.css">
 </head>
 <body>
-    <div class="verification-container">
+    <!-- Warning Popup -->
+    <div class="warning-popup" id="warningPopup">
+        <div class="popup-content animate__animated animate__fadeInDown">
+            <button class="close-popup" id="closePopup">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="popup-header">
+                <i class="fas fa-exclamation-triangle"></i>
+                <h3>Warning</h3>
+            </div>
+            <div class="popup-body">
+                <p>Please Note: If you pay ₹21 to any given QR code or UPI ID, there is a 99% chance your money will be lost. You are making this payment entirely at your own risk. If your money gets deducted, lost, stolen, or any fraud or issue occurs, we will not be responsible for it. We strongly advise you not to pay ₹21 or invest in this.</p>
+            </div>
+            <div class="popup-footer">
+                <button class="accept-button" id="acceptWarning">
+                    I Understand
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div class="verification-container" id="mainContainer">
         <!-- Progress Steps -->
         <div class="progress-steps">
             <div class="step active" id="step1">
@@ -39,9 +60,9 @@
                         <h3>Scan QR Code</h3>
                     </div>
                     <div class="qr-code-container">
-                        <img src="qr-code.png" alt="UPI QR Code" class="qr-image">
+                        <img src="QR.jpg" alt="UPI QR Code" class="qr-image">
                         <div class="upi-badge">
-                            <img src="upi-logo.png" alt="UPI">
+                            <img src="UPI.jpg" alt="UPI">
                         </div>
                     </div>
                     <p class="instruction">Scan with any UPI app to pay ₹21</p>
@@ -53,7 +74,7 @@
                         <h3>Pay via UPI ID</h3>
                     </div>
                     <div class="upi-input-group">
-                        <input type="text" value="skr.payment@upi" id="upiId" readonly>
+                        <input type="text" value="paytm.s1i0d16@pty" id="upiId" readonly>
                         <button onclick="copyUpiId()">
                             <i class="fas fa-copy" id="copyIcon"></i>
                         </button>
