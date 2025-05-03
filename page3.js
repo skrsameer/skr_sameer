@@ -27,27 +27,47 @@ document.addEventListener('DOMContentLoaded', function() {
     let otpTimerInterval;
     let recaptchaVerifier;
     let isPhoneVerified = false;
+    let isOtpSent = false;
 
     // Initialize
-    continueBtn.disabled = true;
-    otpGroup.style.display = 'none';
-    recaptchaContainer.style.display = 'none';
+    function init() {
+        continueBtn.disabled = true;
+        otpGroup.style.display = 'none';
+        recaptchaContainer.style.display = 'none';
+        initializeRecaptcha();
+    }
 
     // Initialize reCAPTCHA
     function initializeRecaptcha() {
+        if (!firebase.auth) {
+            console.error('Firebase Auth not loaded');
+            return;
+        }
+        
         recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
             'size': 'invisible',
             'callback': (response) => {
                 // reCAPTCHA solved, allow sending OTP
                 sendOtp();
+            },
+            'expired-callback': () => {
+                // reCAPTCHA expired
+                console.log('reCAPTCHA expired');
+                sendOtpBtn.disabled = false;
+                document.getElementById('btnText').textContent = 'Send OTP';
             }
         });
     }
 
     // Check if phone is registered
     function isPhoneRegistered(phone) {
-        const users = JSON.parse(localStorage.getItem('users')) || [];
-        return users.some(user => user.phone === phone);
+        try {
+            const users = JSON.parse(localStorage.getItem('users')) || [];
+            return users.some(user => user.phone === phone);
+        } catch (error) {
+            console.error('Error accessing localStorage:', error);
+            return false;
+        }
     }
 
     // Start OTP Timer
@@ -62,6 +82,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (remaining <= 0) {
                 otpTimer.textContent = 'OTP expired. Please request a new one.';
                 clearInterval(otpTimerInterval);
+                isOtpSent = false;
                 return;
             }
 
@@ -72,6 +93,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         updateTimer();
         otpTimerInterval = setInterval(updateTimer, 1000);
+        isOtpSent = true;
     }
 
     // Validate Phone Number
@@ -99,15 +121,27 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Validate Username
     function validateUsername(username) {
+        const usernameError = document.getElementById('usernameError');
         const usernameRegex = /^[a-zA-Z0-9_]{4,20}$/;
-        
-        if (!usernameRegex.test(username)) {
-            showError(document.getElementById('usernameError'), 
-                'Username must be 4-20 characters (letters, numbers, underscore)');
+
+        if (!username) {
+            showError(usernameError, 'Username is required');
             return false;
         }
-        
-        hideError(document.getElementById('usernameError'));
+
+        if (!usernameRegex.test(username)) {
+            showError(usernameError, 'Username must be 4-20 characters (letters, numbers, underscore)');
+            return false;
+        }
+
+        // Check if username already exists
+        const users = JSON.parse(localStorage.getItem('users')) || [];
+        if (users.some(user => user.username === username)) {
+            showError(usernameError, 'Username already taken');
+            return false;
+        }
+
+        hideError(usernameError);
         return true;
     }
 
@@ -115,6 +149,11 @@ document.addEventListener('DOMContentLoaded', function() {
     function validatePassword() {
         const password = passwordInput.value;
         const confirmPassword = confirmPasswordInput.value;
+
+        if (!password) {
+            showError(passwordError, 'Password is required');
+            return false;
+        }
 
         if (password.length < 8) {
             showError(passwordError, 'Password must be at least 8 characters');
@@ -133,18 +172,21 @@ document.addEventListener('DOMContentLoaded', function() {
     // Check Password Strength
     function checkPasswordStrength(password) {
         let strength = 0;
-        
+
         // Length check
         if (password.length >= 8) strength++;
         if (password.length >= 12) strength++;
-        
+
         // Character variety checks
         if (/[A-Z]/.test(password)) strength++;
         if (/[0-9]/.test(password)) strength++;
         if (/[^A-Za-z0-9]/.test(password)) strength++;
-        
+
         // Update UI
-        if (strength <= 2) {
+        if (password.length === 0) {
+            strengthMeter.style.width = '0%';
+            strengthText.textContent = '';
+        } else if (strength <= 2) {
             strengthMeter.style.width = '33%';
             strengthMeter.style.backgroundColor = '#e74c3c';
             strengthText.textContent = 'Weak';
@@ -191,45 +233,52 @@ document.addEventListener('DOMContentLoaded', function() {
     function sendOtp() {
         const phone = phoneInput.value.trim();
 
-        if (!validatePhoneNumber(phone)) return;
+        if (!validatePhoneNumber(phone)) {
+            recaptchaVerifier.reset();
+            return;
+        }
 
         sendOtpBtn.disabled = true;
         document.getElementById('btnText').textContent = 'Sending...';
 
         const formattedPhone = `+91${phone}`;
-        
+
         auth.signInWithPhoneNumber(formattedPhone, recaptchaVerifier)
             .then((result) => {
                 confirmationResult = result;
                 otpGroup.style.display = 'block';
                 startOtpTimer();
                 isPhoneVerified = false;
-                alert('OTP sent successfully to ' + formattedPhone);
+                console.log('OTP sent successfully to ' + formattedPhone);
             })
             .catch((error) => {
                 console.error('OTP Error:', error);
                 let errorMessage = 'Failed to send OTP. Please try again.';
-                
+
                 if (error.code === 'auth/too-many-requests') {
                     errorMessage = 'Too many requests. Please try again later.';
                 } else if (error.code === 'auth/invalid-phone-number') {
                     errorMessage = 'Invalid phone number format.';
+                } else if (error.code === 'auth/quota-exceeded') {
+                    errorMessage = 'OTP quota exceeded. Please try again later.';
                 }
-                
+
                 showError(phoneError, errorMessage);
+                recaptchaVerifier.reset();
             })
             .finally(() => {
                 sendOtpBtn.disabled = false;
-                document.getElementById('btnText').textContent = 'Resend OTP';
+                document.getElementById('btnText').textContent = isOtpSent ? 'Resend OTP' : 'Send OTP';
             });
     }
 
     // Handle Send OTP Button Click
-    sendOtpBtn.addEventListener('click', function() {
+    sendOtpBtn.addEventListener('click', function(e) {
+        e.preventDefault();
         if (!recaptchaVerifier) {
             initializeRecaptcha();
         }
-        
+
         // This will trigger the reCAPTCHA and then call sendOtp() when solved
         recaptchaVerifier.verify();
     });
@@ -256,14 +305,28 @@ document.addEventListener('DOMContentLoaded', function() {
     passwordInput.addEventListener('input', function() {
         checkPasswordStrength(this.value);
         validatePassword();
+        updateContinueButtonState();
     });
 
-    confirmPasswordInput.addEventListener('input', validatePassword);
+    confirmPasswordInput.addEventListener('input', function() {
+        validatePassword();
+        updateContinueButtonState();
+    });
 
     // Username Validation
     document.getElementById('username').addEventListener('input', function() {
         validateUsername(this.value.trim());
+        updateContinueButtonState();
     });
+
+    // Phone Validation
+    phoneInput.addEventListener('input', function() {
+        validatePhoneNumber(this.value.trim());
+        updateContinueButtonState();
+    });
+
+    // Terms Checkbox
+    document.getElementById('terms').addEventListener('change', updateContinueButtonState);
 
     // Form Submission
     form.addEventListener('submit', async function(e) {
@@ -284,18 +347,22 @@ document.addEventListener('DOMContentLoaded', function() {
             alert('Please agree to the Terms of Service');
             return;
         }
+        if (!isOtpSent) {
+            showError(otpError, 'Please request an OTP first');
+            return;
+        }
 
         try {
             // Verify OTP
             const userCredential = await confirmationResult.confirm(otp);
             isPhoneVerified = true;
 
-            // Create user object
+            // Create user object with better password handling
             const user = {
                 username,
                 name,
                 phone,
-                password: btoa(password), // Simple encoding (not secure for production)
+                password: await hashPassword(password), // Use proper hashing
                 isVerified: true,
                 joinedDate: new Date().toISOString()
             };
@@ -309,6 +376,7 @@ document.addEventListener('DOMContentLoaded', function() {
             sessionStorage.setItem('currentUser', JSON.stringify({
                 username,
                 phone,
+                name,
                 isLoggedIn: true
             }));
 
@@ -317,13 +385,13 @@ document.addEventListener('DOMContentLoaded', function() {
         } catch (error) {
             console.error('Verification Error:', error);
             let errorMessage = 'Invalid OTP. Please try again.';
-            
+
             if (error.code === 'auth/invalid-verification-code') {
                 errorMessage = 'Invalid OTP code. Please check and try again.';
             } else if (error.code === 'auth/code-expired') {
                 errorMessage = 'OTP has expired. Please request a new one.';
             }
-            
+
             showError(otpError, errorMessage);
         }
     });
@@ -344,13 +412,28 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Enable continue button when all fields are valid
-    form.addEventListener('input', function() {
+    // Update continue button state
+    function updateContinueButtonState() {
         const usernameValid = validateUsername(document.getElementById('username').value.trim());
         const phoneValid = validatePhoneNumber(phoneInput.value.trim());
         const passwordValid = validatePassword();
         const termsChecked = document.getElementById('terms').checked;
-        
-        continueBtn.disabled = !(usernameValid && phoneValid && passwordValid && termsChecked && isPhoneVerified);
-    });
+        const otpValid = otpInput.value.length === 6;
+
+        continueBtn.disabled = !(usernameValid && phoneValid && passwordValid && termsChecked && otpValid && isOtpSent);
+    }
+
+    // Simple password hashing function (in a real app, use proper server-side hashing)
+    async function hashPassword(password) {
+        // This is a simple example. In production, use Web Crypto API or a proper library
+        const encoder = new TextEncoder();
+        const data = encoder.encode(password);
+        const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+        const hashArray = Array.from(new Uint8Array(hashBuffer));
+        const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        return hashHex;
+    }
+
+    // Initialize the application
+    init();
 });
