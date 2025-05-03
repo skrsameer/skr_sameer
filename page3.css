@@ -296,3 +296,6 @@ input:focus {
         margin-top: 10px;
     }
 }
+#recaptcha-container {
+    display: none; /* यह reCAPTCHA को छुपाएगा */
+}
