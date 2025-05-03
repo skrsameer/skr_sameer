@@ -32,6 +32,10 @@ body {
     line-height: 1.6;
 }
 
+body.popup-visible {
+    overflow: hidden;
+}
+
 .verification-container {
     background: var(--white);
     border-radius: var(--border-radius);
@@ -42,6 +46,7 @@ body {
     margin: 20px auto;
     position: relative;
     overflow: hidden;
+    transition: var(--transition);
 }
 
 /* Progress Steps */
@@ -482,6 +487,105 @@ h1 {
     transform: translateY(0);
 }
 
+/* Warning Popup Styles */
+.warning-popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 1000;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.popup-content {
+    background-color: var(--white);
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    max-width: 500px;
+    width: 100%;
+    padding: 25px;
+    position: relative;
+}
+
+.close-popup {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 20px;
+    color: var(--gray);
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.close-popup:hover {
+    color: var(--danger);
+    transform: rotate(90deg);
+}
+
+.popup-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.popup-header i {
+    color: var(--warning);
+    font-size: 28px;
+    margin-right: 15px;
+}
+
+.popup-header h3 {
+    color: var(--dark);
+    font-size: 22px;
+    margin: 0;
+}
+
+.popup-body {
+    margin-bottom: 25px;
+}
+
+.popup-body p {
+    color: var(--gray);
+    line-height: 1.6;
+    font-size: 15px;
+}
+
+.popup-footer {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.accept-button {
+    padding: 10px 25px;
+    background-color: var(--primary);
+    color: var(--white);
+    border: none;
+    border-radius: 50px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.accept-button:hover {
+    background-color: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(108, 92, 231, 0.3);
+}
+
+/* Hide main container when popup is visible */
+body.popup-visible #mainContainer {
+    filter: blur(3px);
+    pointer-events: none;
+    user-select: none;
+}
+
 /* Animations */
 @keyframes spin {
     100% { transform: rotate(360deg); }
@@ -514,5 +618,17 @@ h1 {
     .qr-code-container {
         width: 160px;
         height: 160px;
+    }
+    
+    .popup-content {
+        padding: 20px 15px;
+    }
+    
+    .popup-header h3 {
+        font-size: 20px;
+    }
+    
+    .popup-body p {
+        font-size: 14px;
     }
 }
