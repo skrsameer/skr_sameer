@@ -284,7 +284,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function redirectToDashboard() {
         showTemporaryMessage('Registration successful! Redirecting...', 'success');
         setTimeout(() => {
-            window.location.href = 'dashboard.html';
+            window.location.href = 'page5.html';
         }, 1500);
     }
 
