@@ -6,35 +6,35 @@
     <title>Earn With SKR</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
     <link rel="stylesheet" href="page1.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="slideshow-container">
-        <!-- Slide 1 - Welcome -->
+        <!-- Slide 1 - Get Started -->
         <div class="slide">
-            <div class="slide-bg" style="background-image: url('assets/earn-bg.jpg');"></div>
-            <div class="slide-content animate__animated">
-                <h1>Welcome</h1>
-                <img src="slide 1.png" alt="image" class="image">
+            <div class="slide-bg"></div>
+            <div class="slide-content">
+                <h1 class="animate__animated animate__fadeIn">Welcome</h1>
+                <img src="slide 1.png" alt="Get Started" class="image animate__animated animate__pulse">
                 <p>Watch Ads & Earn money</p>
-                <button class="slide-btn next-btn">Get Started</button>
+                <button class="slide-btn next-btn animate__animated animate__fadeInUp">Get Started</button>
             </div>
         </div>
 
         <!-- Slide 2 - Earn With SKR -->
         <div class="slide">
-            <div class="slide-bg" style="background-image: url('assets/earn-bg.jpg');"></div>
-            <div class="slide-content animate__animated">
-                <img src="slide 2.png" alt="image" class="image">
+            <div class="slide-bg"></div>
+            <div class="slide-content">
+                <img src="slide 2.png" alt="Earn With SKR" class="image animate__animated animate__bounce">
                 <button class="slide-btn next-btn">Earn With SKR</button>
             </div>
         </div>
 
         <!-- Slide 3 - Continue -->
         <div class="slide">
-            <div class="slide-bg" style="background-image: url('assets/continue-bg.jpg');"></div>
-            <div class="slide-content animate__animated">
-                <img src="slide 3.png" alt="image" class="image">
-
+            <div class="slide-bg"></div>
+            <div class="slide-content">
+                <img src="slide 3.png" alt="Continue" class="image animate__animated animate__fadeIn">
                 <div class="progress-container">
                     <div class="progress-bar"></div>
                 </div>
@@ -42,44 +42,44 @@
             </div>
         </div>
 
-        <!-- Slide 4 - Registration -->
+        <!-- Slide 4 - Login/Signup -->
         <div class="slide">
-            <div class="slide-content animate__animated">
-                <h1 class="greeting">Hello, Friend!</h1>
+            <div class="slide-content">
+                <h1 class="greeting animate__animated animate__bounce">Hello, Friend!</h1>
                 <p>Enter your personal details</p>
                 <p>and start journey with us</p>
-                <img src="Logo.png" alt="Ads" class="ads-image">
-                <p class="highlight">watch Ads & Earn Money</p>
-                <div class="skr-branding">
+                
+                <!-- Scrolling Ads -->
+                <div class="scrolling-ads">
+                    <div class="scrolling-content">
+                        <div class="ad-item">Earn ₹100 Daily</div>
+                        <div class="ad-item">Watch & Earn</div>
+                        <div class="ad-item">Refer & Get Bonus</div>
+                        <div class="ad-item">Instant Withdrawal</div>
+                        <div class="ad-item">No Investment Needed</div>
+                    </div>
+                </div>
+                
+                <img src="Logo.png" alt="Logo" class="logo animate__animated animate__pulse">
+                <p class="highlight">Watch Ads & Earn Money</p>
+                <div class="brand">
                     <span>Earn With SKR</span>
                 </div>
                 <div class="auth-buttons">
                     <button class="login-btn">Login</button>
- <script>
-    document.querySelector('.login-btn').onclick = function() {
-        window.location.href = "page4.html";
-    };
-</script>
-                   <button class="signup-btn">Sign up</button>
-
-<script>
-    document.querySelector('.signup-btn').onclick = function() {
-        window.location.href = "page2.html";
-    };
-</script>
+                    <button class="signup-btn">Sign up</button>
                 </div>
             </div>
         </div>
 
-        <!-- Navigation dots -->
-<div class="dots-container">
-    <span class="dot" data-slide="1"></span>
-    <span class="dot" data-slide="2"></span>
-    <span class="dot" data-slide="3"></span>
-    <span class="dot" data-slide="4"></span>
-</div>
+        <!-- Navigation Dots -->
+        <div class="dots-container">
+            <span class="dot active"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+            <span class="dot"></span>
+        </div>
     </div>
-
 
     <script src="page1.js"></script>
 </body>

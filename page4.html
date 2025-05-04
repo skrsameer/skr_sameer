@@ -13,7 +13,7 @@
     <div class="login-container">
         <div class="login-card">
             <div class="logo-container">
-                <img src="Logo.png" alt="SKR Logo" class="logo">
+                <img src="Logo.png" alt="SKR Logo" class="logo animate__animated animate__pulse">
             </div>
             
             <h1 class="animate__animated animate__fadeInDown">Welcome Back!</h1>
@@ -52,7 +52,9 @@
             </form>
             
             <div class="alternative-login animate__animated animate__fadeIn animate__delay-2.5s">
-                <p>Or login with</p>
+                <div class="divider">
+                    <span>Or login with</span>
+                </div>
                 <div class="social-icons">
                     <a href="#" class="social-icon google"><i class="fab fa-google"></i></a>
                     <a href="#" class="social-icon facebook"><i class="fab fa-facebook-f"></i></a>
@@ -60,20 +62,22 @@
             </div>
             
             <p class="signup-link animate__animated animate__fadeIn animate__delay-3s">
-                Don't have an account? <a href="page3.html">Sign up</a>
+                Don't have an account? <a href="page2.html">Sign up</a>
             </p>
         </div>
     </div>
 
     <!-- Forgot Password Modal -->
     <div id="forgotPasswordModal" class="modal">
-        <div class="modal-content">
+        <div class="modal-content animate__animated animate__fadeInDown">
             <span class="close-modal">&times;</span>
             <h2>Reset Password</h2>
             <form id="forgotPasswordForm">
                 <div class="form-group">
-                    <label for="resetPhone"></label>
-                    <input type="tel" id="resetPhone" placeholder="Enter your phone number" required>
+                    <i class="fas fa-phone input-icon"></i>
+                    <input type="tel" id="resetPhone" required>
+                    <label for="resetPhone">Phone Number</label>
+                    <div class="underline"></div>
                 </div>
                 <button type="submit" class="submit-btn">Send OTP</button>
             </form>

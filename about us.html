@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - Earn With SKR</title>
+    <style>
+        :root {
+            --primary: #4CAF50;
+            --secondary: #388E3C;
+            --dark: #333;
+            --light: #f9f9f9;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            overflow-x: hidden;
+        }
+        .hero {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            text-align: center;
+            padding: 80px 20px;
+            clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+            margin-bottom: 50px;
+            transform: translateY(-50px);
+            opacity: 0;
+            animation: slideDown 0.8s forwards;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        h2 {
+            color: var(--secondary);
+            margin: 40px 0 20px;
+            position: relative;
+            display: inline-block;
+            transform: translateX(-30px);
+            opacity: 0;
+            animation: fadeInRight 0.6s forwards 0.3s;
+        }
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background: var(--primary);
+        }
+        p {
+            margin-bottom: 20px;
+            line-height: 1.8;
+            transform: translateY(20px);
+            opacity: 0;
+            animation: fadeInUp 0.5s forwards 0.5s;
+        }
+        .mission-box {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            margin: 30px 0;
+            transform: scale(0.95);
+            opacity: 0;
+            animation: zoomIn 0.6s forwards 0.4s;
+        }
+        .team {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px;
+            margin: 40px 0;
+        }
+        .member {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            width: 250px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: all 0.3s;
+            transform: translateY(30px);
+            opacity: 0;
+        }
+        .member:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+        }
+        .member img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid var(--primary);
+            margin-bottom: 15px;
+        }
+        .member h3 {
+            color: var(--secondary);
+            margin-bottom: 5px;
+        }
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            margin: 50px 0;
+        }
+        .stat-box {
+            text-align: center;
+            padding: 20px;
+            flex: 1;
+            min-width: 150px;
+        }
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+        footer {
+            text-align: center;
+            padding: 30px;
+            background: var(--dark);
+            color: white;
+            margin-top: 50px;
+        }
+        @keyframes slideDown {
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        @keyframes fadeInRight {
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        @keyframes fadeInUp {
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        @keyframes zoomIn {
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <section class="hero">
+        <h1>About Earn With SKR</h1>
+        <p>Your trusted platform to earn money by watching ads and completing simple tasks</p>
+    </section>
+
+    <div class="container">
+        <section>
+            <h2>Our Story</h2>
+            <p>Founded in 2024, Earn With SKR began with a simple mission: to create genuine earning opportunities for everyone. What started as a small project has grown into a platform helping thousands of users earn supplemental income.</p>
+
+            <div class="mission-box">
+                <h2>Our Mission</h2>
+                <p>We're committed to providing:</p>
+                <ul>
+                    <li>Legitimate earning opportunities</li>
+                    <li>Transparent payment systems</li>
+                    <li>User-friendly experience</li>
+                    <li>Continuous platform improvements</li>
+                </ul>
+            </div>
+
+            <h2>Our Team</h2>
+            <p>Meet the passionate team behind Earn With SKR:</p>
+            <div class="team">
+                <div class="member" style="animation: fadeInUp 0.6s forwards 0.3s">
+                    <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Team Member">
+                    <h3>SKR Founder</h3>
+                    <p>CEO & Founder</p>
+                    <div class="social">
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                    </div>
+                </div>
+                <div class="member" style="animation: fadeInUp 0.6s forwards 0.5s">
+                    <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Team Member">
+                    <h3>Jane Doe</h3>
+                    <p>Marketing Head</p>
+                    <div class="social">
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                    </div>
+                </div>
+                <div class="member" style="animation: fadeInUp 0.6s forwards 0.7s">
+                    <img src="https://randomuser.me/api/portraits/men/75.jpg" alt="Team Member">
+                    <h3>John Smith</h3>
+                    <p>Developer</p>
+                    <div class="social">
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <h2>Our Achievements</h2>
+            <div class="stats">
+                <div class="stat-box" style="animation: fadeInUp 0.6s forwards 0.3s">
+                    <div class="stat-number" id="users-count">0</div>
+                    <p>Active Users</p>
+                </div>
+                <div class="stat-box" style="animation: fadeInUp 0.6s forwards 0.5s">
+                    <div class="stat-number" id="payouts-count">0</div>
+                    <p>Total Payouts</p>
+                </div>
+                <div class="stat-box" style="animation: fadeInUp 0.6s forwards 0.7s">
+                    <div class="stat-number" id="ads-count">0</div>
+                    <p>Ads Watched</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Earn With SKR. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        // Animate elements on scroll
+        document.addEventListener('DOMContentLoaded', () => {
+            // Animate team members
+            const members = document.querySelectorAll('.member');
+            members.forEach((member, index) => {
+                member.style.animationDelay = `${index * 0.2 + 0.3}s`;
+            });
+
+            // Animate stats
+            const statBoxes = document.querySelectorAll('.stat-box');
+            statBoxes.forEach((box, index) => {
+                box.style.animationDelay = `${index * 0.2 + 0.3}s`;
+            });
+
+            // Counter animation
+            const animateCounters = () => {
+                const counters = [
+                    { element: document.getElementById('users-count'), target: 12500, duration: 2000 },
+                    { element: document.getElementById('payouts-count'), target: 8400, duration: 2000 },
+                    { element: document.getElementById('ads-count'), target: 356000, duration: 2000 }
+                ];
+
+                counters.forEach(counter => {
+                    const start = 0;
+                    const increment = counter.target / (counter.duration / 16);
+                    let current = start;
+                    const timer = setInterval(() => {
+                        current += increment;
+                        if (current >= counter.target) {
+                            clearInterval(timer);
+                            current = counter.target;
+                        }
+                        counter.element.textContent = Math.floor(current).toLocaleString();
+                    }, 16);
+                });
+            };
+
+            // Trigger counters when section is visible
+            const observer = new IntersectionObserver((entries) => {
+                if (entries[0].isIntersecting) {
+                    animateCounters();
+                    observer.disconnect();
+                }
+            }, { threshold: 0.5 });
+
+            observer.observe(document.querySelector('.stats'));
+        });
+    </script>
+</body>
+</html>

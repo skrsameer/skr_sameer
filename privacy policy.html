@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy - Earn With SKR</title>
+    <style>
+        :root {
+            --primary: #4CAF50;
+            --secondary: #388E3C;
+            --dark: #333;
+            --light: #f9f9f9;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        body {
+            background-color: var(--light);
+            color: var(--dark);
+            line-height: 1.8;
+            overflow-x: hidden;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        header {
+            text-align: center;
+            padding: 40px 0;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            margin-bottom: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transform: translateY(-20px);
+            opacity: 0;
+            animation: fadeInUp 0.8s forwards;
+        }
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        h2 {
+            color: var(--secondary);
+            margin: 30px 0 15px;
+            padding-bottom: 8px;
+            border-bottom: 2px dashed var(--primary);
+            transform: translateX(-20px);
+            opacity: 0;
+            animation: fadeInLeft 0.6s forwards 0.3s;
+        }
+        p, ul {
+            margin-bottom: 20px;
+            transform: translateY(20px);
+            opacity: 0;
+            animation: fadeInUp 0.5s forwards 0.5s;
+        }
+        ul {
+            padding-left: 20px;
+        }
+        li {
+            margin-bottom: 8px;
+        }
+        a {
+            color: var(--primary);
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px;
+            background-color: var(--dark);
+            color: white;
+            border-radius: 8px;
+            transform: translateY(20px);
+            opacity: 0;
+            animation: fadeInUp 0.6s forwards 0.8s;
+        }
+        @keyframes fadeInUp {
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        @keyframes fadeInLeft {
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Privacy Policy</h1>
+            <p>Last Updated: June 2024</p>
+        </header>
+
+        <section>
+            <h2>1. Information Collection</h2>
+            <p>We collect the following information when you use Earn With SKR:</p>
+            <ul>
+                <li>Personal details (name, email address)</li>
+                <li>Device information (IP address, browser type)</li>
+                <li>Usage data (pages visited, time spent)</li>
+                <li>Payment information (for withdrawals)</li>
+            </ul>
+
+            <h2>2. How We Use Your Information</h2>
+            <p>We use collected information to:</p>
+            <ul>
+                <li>Provide and improve our services</li>
+                <li>Process payments and rewards</li>
+                <li>Prevent fraud and ensure security</li>
+                <li>Personalize user experience</li>
+            </ul>
+
+            <h2>3. Cookies and Tracking</h2>
+            <p>We use cookies to:</p>
+            <ul>
+                <li>Remember user preferences</li>
+                <li>Analyze website traffic</li>
+                <li>Enable ad personalization</li>
+            </ul>
+            <p>You can disable cookies in your browser settings.</p>
+
+            <h2>4. Google AdSense</h2>
+            <p>We use Google AdSense to display ads. Google uses cookies to serve ads based on user visits. You can opt out of personalized advertising by visiting <a href="https://adssettings.google.com" target="_blank">Google Ads Settings</a>.</p>
+
+            <h2>5. Data Security</h2>
+            <p>We implement security measures including:</p>
+            <ul>
+                <li>SSL encryption</li>
+                <li>Secure servers</li>
+                <li>Regular security audits</li>
+            </ul>
+
+            <h2>6. Third-Party Sharing</h2>
+            <p>We may share data with:</p>
+            <ul>
+                <li>Payment processors</li>
+                <li>Analytics providers</li>
+                <li>Advertising partners</li>
+            </ul>
+            <p>We never sell your personal information.</p>
+
+            <h2>7. User Rights</h2>
+            <p>You have the right to:</p>
+            <ul>
+                <li>Access your personal data</li>
+                <li>Request data deletion</li>
+                <li>Opt-out of marketing</li>
+                <li>Withdraw consent</li>
+            </ul>
+
+            <h2>8. Policy Changes</h2>
+            <p>We may update this policy. Changes will be posted on this page with a revised "Last Updated" date.</p>
+
+            <h2>9. Contact Us</h2>
+            <p>For privacy concerns, contact us at: <a href="mailto:privacy@earnwithskr.com">privacy@earnwithskr.com</a></p>
+        </section>
+
+        <footer>
+            <p>&copy; 2024 Earn With SKR. All Rights Reserved.</p>
+        </footer>
+    </div>
+
+    <script>
+        // Animate elements sequentially
+        document.addEventListener('DOMContentLoaded', () => {
+            const animatedElements = document.querySelectorAll('h2, p, ul, footer');
+            animatedElements.forEach((el, index) => {
+                el.style.animationDelay = `${index * 0.1}s`;
+            });
+            
+            // Update last modified date automatically
+            const lastUpdated = document.querySelector('header p');
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            lastUpdated.textContent = `Last Updated: ${new Date().toLocaleDateString('en-US', options)}`;
+        });
+    </script>
+</body>
+</html>

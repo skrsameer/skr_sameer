@@ -8,40 +8,54 @@ document.addEventListener('DOMContentLoaded', function() {
     const closeModal = document.querySelector('.close-modal');
     const forgotPasswordForm = document.getElementById('forgotPasswordForm');
 
-    // Check if remember me was checked
-    const rememberMe = localStorage.getItem('rememberMe') === 'true';
-    if (rememberMe) {
-        document.getElementById('rememberMe').checked = true;
-        document.getElementById('loginUsername').value = localStorage.getItem('rememberedUsername') || '';
-    }
+    // Initialize form labels
+    document.querySelectorAll('.form-group input').forEach(input => {
+        const label = input.nextElementSibling;
+        
+        // Check if input has value on load
+        if (input.value.trim() !== '') {
+            label.style.transform = 'translateY(-22px) scale(0.9)';
+            label.style.color = 'var(--primary-color)';
+            label.style.fontWeight = '500';
+            label.style.left = '15px';
+            label.style.background = 'white';
+        }
+        
+        // Handle input events
+        input.addEventListener('input', function() {
+            if (this.value.trim() !== '') {
+                label.style.transform = 'translateY(-22px) scale(0.9)';
+                label.style.color = 'var(--primary-color)';
+                label.style.fontWeight = '500';
+                label.style.left = '15px';
+                label.style.background = 'white';
+            } else {
+                label.style.transform = '';
+                label.style.color = '';
+                label.style.fontWeight = '';
+                label.style.left = '40px';
+                label.style.background = 'transparent';
+            }
+        });
+    });
 
     // Toggle password visibility
     togglePassword.addEventListener('click', function() {
         const passwordInput = document.getElementById('loginPassword');
-        if (passwordInput.type === 'password') {
-            passwordInput.type = 'text';
-            this.classList.replace('fa-eye', 'fa-eye-slash');
-        } else {
-            passwordInput.type = 'password';
-            this.classList.replace('fa-eye-slash', 'fa-eye');
-        }
+        const isPassword = passwordInput.type === 'password';
+        passwordInput.type = isPassword ? 'text' : 'password';
+        this.classList.toggle('fa-eye-slash', isPassword);
+        this.classList.toggle('fa-eye', !isPassword);
     });
 
-    // Form submission
+    // Login form submission
     loginForm.addEventListener('submit', function(e) {
         e.preventDefault();
+        loginError.textContent = '';
         
         const username = document.getElementById('loginUsername').value.trim();
         const password = document.getElementById('loginPassword').value;
         const rememberMe = document.getElementById('rememberMe').checked;
-        
-        // Store remember me preference
-        localStorage.setItem('rememberMe', rememberMe);
-        if (rememberMe) {
-            localStorage.setItem('rememberedUsername', username);
-        } else {
-            localStorage.removeItem('rememberedUsername');
-        }
         
         // Validate inputs
         if (!username || !password) {
@@ -52,17 +66,17 @@ document.addEventListener('DOMContentLoaded', function() {
         // Get users from localStorage
         const users = JSON.parse(localStorage.getItem('users')) || [];
         
-        // Find matching user (check both username and phone)
+        // Find matching user
         const user = users.find(u => 
             (u.username === username || u.phone === username) && 
-            atob(u.password) === password
+            u.password === btoa(password)
         );
         
         if (user) {
-            // Check if account is verified
-            if (!user.isVerified) {
-                showError('Account not verified. Please complete verification first.');
-                return;
+            // Store remember me preference
+            localStorage.setItem('rememberMe', rememberMe);
+            if (rememberMe) {
+                localStorage.setItem('rememberedUsername', username);
             }
             
             // Create session
@@ -81,7 +95,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // Forgot password functionality
+    // Forgot password modal
     forgotPasswordLink.addEventListener('click', function(e) {
         e.preventDefault();
         forgotPasswordModal.style.display = 'block';
@@ -101,59 +115,23 @@ document.addEventListener('DOMContentLoaded', function() {
         e.preventDefault();
         const phone = document.getElementById('resetPhone').value.trim();
         
-        // Validate phone
         if (!/^[6-9]\d{9}$/.test(phone)) {
             alert('Please enter a valid 10-digit Indian phone number');
             return;
         }
         
-        // Check if phone exists
         const users = JSON.parse(localStorage.getItem('users')) || [];
         const userExists = users.some(u => u.phone === phone);
         
-        if (!userExists) {
+        if (userExists) {
+            alert(`OTP would be sent to +91${phone} in production`);
+            forgotPasswordModal.style.display = 'none';
+        } else {
             alert('No account found with this phone number');
-            return;
         }
-        
-        // In production: Send OTP to phone
-        alert(`OTP would be sent to +91${phone} in production`);
-        forgotPasswordModal.style.display = 'none';
     });
 
-    // Helper function to show error
     function showError(message) {
         loginError.textContent = message;
-        loginError.style.display = 'block';
-        loginForm.classList.add('shake');
-        setTimeout(() => {
-            loginForm.classList.remove('shake');
-        }, 400);
     }
-
-    // Make labels work properly for pre-filled inputs
-    document.querySelectorAll('.form-group input').forEach(input => {
-        // Check on page load
-        if (input.value.trim() !== '') {
-            input.nextElementSibling.style.transform = 'translateY(-22px) scale(0.9)';
-            input.nextElementSibling.style.color = 'var(--primary-color)';
-            input.nextElementSibling.style.fontWeight = '500';
-            input.nextElementSibling.style.left = '40px';
-        }
-        
-        // Check on input
-        input.addEventListener('input', function() {
-            if (this.value.trim() !== '') {
-                this.nextElementSibling.style.transform = 'translateY(-22px) scale(0.9)';
-                this.nextElementSibling.style.color = 'var(--primary-color)';
-                this.nextElementSibling.style.fontWeight = '500';
-                this.nextElementSibling.style.left = '40px';
-            } else {
-                this.nextElementSibling.style.transform = '';
-                this.nextElementSibling.style.color = '';
-                this.nextElementSibling.style.fontWeight = '';
-                this.nextElementSibling.style.left = '40px';
-            }
-        });
-    });
 });

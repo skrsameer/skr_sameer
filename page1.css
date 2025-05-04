@@ -6,12 +6,11 @@
 }
 
 body {
-    background-color: white;
+    background: #f5f5f5;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    overflow: hidden;
+    min-height: 100vh;
 }
 
 .slideshow-container {
@@ -19,10 +18,10 @@ body {
     width: 100%;
     max-width: 400px;
     height: 700px;
-    margin: auto;
     border-radius: 20px;
     overflow: hidden;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    background: white;
 }
 
 .slide {
@@ -30,20 +29,19 @@ body {
     width: 100%;
     height: 100%;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     padding: 30px;
     text-align: center;
     opacity: 0;
-    transition: all 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-    transform: scale(0.9);
-    z-index: 1;
+    transition: all 0.8s ease;
+    transform: translateX(100%);
 }
 
 .slide.active {
     opacity: 1;
-    transform: scale(1);
-    z-index: 2;
+    transform: translateX(0);
 }
 
 .slide-bg {
@@ -52,137 +50,93 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background-size: cover;
-    background-position: center;
-    filter: brightness(0.6);
+    background: linear-gradient(135deg, white);
     z-index: -1;
 }
 
 .slide-content {
     width: 100%;
-    color: #10D800;
-    font-weight: bold;
-
-}
-
-.welcome-text {
-    font-size: 24px;
-    font-weight: 300;
-    margin-bottom: 20px;
-    letter-spacing: 2px;
-    font-weight: bold;
+    color: white;
 }
 
 h1 {
-    font-size: 42px;
+    font-size: 36px;
     margin-bottom: 20px;
-    font-weight: 700;
-    font-weight: bold;
-}
-
-.skr-text {
-    color: red;
-    text-shadow: 0 0 10px rgba(255, 215, 0, 0.7);
+    color: #FFD700;
 }
 
 p {
-    font-size: 18px;
-    margin-bottom: 20px;
-    font-weight: 300;
+    font-size: 16px;
+    margin-bottom: 30px;
     font-weight: bold;
+    color: limegreen;
 }
-
-.highlight {
-    color: bl;
-    font-weight: bold;
-    margin: 20px 0;
-    font-size: 20px;
-}
-
 
 .image {
     width: 300px;
     height: auto;
     margin-bottom: 30px;
-    filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
 }
 
 .logo {
-    width: 100px;
+    width: 160px;
     height: auto;
-    margin-bottom: 30px;
-    filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
-}
-
-.ads-image {
-    width: 200px;
-    height: auto;
-    margin: 20px auto;
+    margin: 5px auto;
     display: block;
     filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.7));
     animation: pulse 2s infinite;
 }
 
-.skr-branding {
-    display: flex;
-    flex-direction: column;
-    margin: 30px 0;
-}
-
-.skr-branding span {
-    font-size: 32px;
+.highlight {
+    color: black;
     font-weight: bold;
-    color: #FF00D0;
-    line-height: 1.2;
+    font-size: 18px;
+    margin: 15px 0;
 }
 
-.auth-buttons {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    margin-top: 30px;
+.brand span {
+    font-size: 28px;
+    font-weight: bold;
+    background: linear-gradient(45deg, #FF00D0, #FFD700);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
 }
 
-.login-btn, .signup-btn, .slide-btn {
-    padding: 15px 30px;
+.slide-btn, .login-btn, .signup-btn {
+    padding: 12px 30px;
     border: none;
     border-radius: 50px;
     font-size: 16px;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    margin-top: 20px;
 }
 
 .slide-btn {
     background: linear-gradient(45deg, #FFD700, #FFA500);
     color: #000;
-    margin-top: 30px;
-    font-weight: 700;
-    letter-spacing: 1px;
+    box-shadow: 0 5px 15px rgba(255,215,0,0.4);
 }
 
 .login-btn {
-    background-color: transparent;
-    color: black;
-    border: 2px solid #0036FF;
+    background: transparent;
+    color: #6e8efb;
+    border: 2px solid #6e8efb;
+    margin-right: 10px;
 }
 
 .signup-btn {
-    background: linear-gradient(45deg, #FFD700, #FFA500);
-    color: #000;
-}
-
-.login-btn:hover, .signup-btn:hover, .slide-btn:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(255, 215, 0, 0.4);
+    background: linear-gradient(45deg, #6e8efb, #a777e3);
+    color: white;
 }
 
 .progress-container {
     width: 100%;
     height: 6px;
-    background-color: rgba(255, 255, 255, 0.2);
-    border-radius: 5px;
+    background: rgba(255,255,255,0.3);
+    border-radius: 3px;
     margin: 30px 0;
     overflow: hidden;
 }
@@ -190,65 +144,78 @@ p {
 .progress-bar {
     height: 100%;
     width: 0;
-    background: linear-gradient(90deg, #FFD700, #FFA500);
-    border-radius: 5px;
+    background: #FFD700;
+    transition: width 4s linear;
 }
 
 .dots-container {
+    position: absolute;
+    bottom: 20px;
+    left: 0;
+    right: 0;
     display: flex;
     justify-content: center;
-    margin-top: 660px;
+    z-index: 10;
 }
 
 .dot {
-    width: 12px;
-    height: 12px;
+    width: 10px;
+    height: 10px;
     margin: 0 5px;
     border-radius: 50%;
-    background-color: #ccc;
+    background: wheat;
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: all 0.3s;
 }
 
 .dot.active {
-    background-color: #6c5ce7;
+    background: #FFD700;
+    transform: scale(1.2);
+    border: 2px solid black;
 }
 
-.greeting {
-    font-size: 36px;
-    color: #FFD700;
-    margin-bottom: 30px;
-    animation: bounce 2s infinite;
+/* Scrolling Ads */
+.scrolling-ads {
+    width: 100%;
+    height: 50px;
+    overflow: hidden;
+    position: relative;
+    margin: 20px 0;
+    background: black(0,0,0,0.1);
+    border-radius: 25px;
 }
 
-.scroll-container {
-  width: 100%;
-  overflow: hidden;
-  position: relative;
-  border: 1px solid #ddd;
-  height: 100px;
+.scrolling-content {
+    display: flex;
+    position: absolute;
+    white-space: nowrap;
+    animation: scrollRightToLeft 20s linear infinite;
+    height: 100%;
+    align-items: center;
 }
 
-.scroll-content {
-  display: flex;
-  position: absolute;
-  white-space: nowrap;
-  animation: scrollRightToLeft 20s linear infinite;
-}
-
-.item {
-  padding: 20px 40px;
-  background: #f0f0f0;
-  margin: 10px;
-  border-radius: 5px;
-  flex-shrink: 0;
+.ad-item {
+    padding: 8px 20px;
+    background: goldenrod(255,255,255,0.2);
+    margin: 0 10px;
+    border-radius: 20px;
+    color: black;
+    font-weight: 500;
+    flex-shrink: 0;
 }
 
 @keyframes scrollRightToLeft {
-  0% {
-    transform: translateX(100%);
-  }
-  100% {
-    transform: translateX(-100%);
-  }
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+
+/* Animations */
+.greeting {
+    animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+    40% { transform: translateY(-20px); }
+    60% { transform: translateY(-10px); }
 }
