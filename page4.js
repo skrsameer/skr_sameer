@@ -101,7 +101,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }));
             
             // Redirect to dashboard
-            window.location.href = 'dashboard.html';
+            window.location.href = 'page7.html';
         } else {
             showError('Invalid email/phone or password');
         }
