@@ -8,36 +8,45 @@ document.addEventListener('DOMContentLoaded', function() {
     const closeModal = document.querySelector('.close-modal');
     const forgotPasswordForm = document.getElementById('forgotPasswordForm');
 
-    // Initialize form labels
-    document.querySelectorAll('.form-group input').forEach(input => {
-        const label = input.nextElementSibling;
-        
-        // Check if input has value on load
-        if (input.value.trim() !== '') {
+    // Initialize form labels and remember me
+    function initForm() {
+        // Check for remembered username
+        if (localStorage.getItem('rememberMe') === 'true') {
+            const rememberedUsername = localStorage.getItem('rememberedUsername');
+            if (rememberedUsername) {
+                document.getElementById('loginUsername').value = rememberedUsername;
+                document.getElementById('rememberMe').checked = true;
+            }
+        }
+
+        // Initialize all input labels
+        document.querySelectorAll('.form-group input').forEach(input => {
+            const label = input.nextElementSibling;
+            if (input.value.trim() !== '') {
+                updateLabelPosition(label, true);
+            }
+            
+            input.addEventListener('input', function() {
+                updateLabelPosition(label, this.value.trim() !== '');
+            });
+        });
+    }
+
+    function updateLabelPosition(label, hasValue) {
+        if (hasValue) {
             label.style.transform = 'translateY(-22px) scale(0.9)';
             label.style.color = 'var(--primary-color)';
             label.style.fontWeight = '500';
             label.style.left = '15px';
             label.style.background = 'white';
+        } else {
+            label.style.transform = '';
+            label.style.color = '';
+            label.style.fontWeight = '';
+            label.style.left = '40px';
+            label.style.background = 'transparent';
         }
-        
-        // Handle input events
-        input.addEventListener('input', function() {
-            if (this.value.trim() !== '') {
-                label.style.transform = 'translateY(-22px) scale(0.9)';
-                label.style.color = 'var(--primary-color)';
-                label.style.fontWeight = '500';
-                label.style.left = '15px';
-                label.style.background = 'white';
-            } else {
-                label.style.transform = '';
-                label.style.color = '';
-                label.style.fontWeight = '';
-                label.style.left = '40px';
-                label.style.background = 'transparent';
-            }
-        });
-    });
+    }
 
     // Toggle password visibility
     togglePassword.addEventListener('click', function() {
@@ -66,10 +75,10 @@ document.addEventListener('DOMContentLoaded', function() {
         // Get users from localStorage
         const users = JSON.parse(localStorage.getItem('users')) || [];
         
-        // Find matching user
+        // Find matching user (check both email and phone)
         const user = users.find(u => 
-            (u.username === username || u.phone === username) && 
-            u.password === btoa(password)
+            (u.email === username || u.phone === username) && 
+            u.password === btoa(password) // Compare with base64 encoded password
         );
         
         if (user) {
@@ -77,12 +86,15 @@ document.addEventListener('DOMContentLoaded', function() {
             localStorage.setItem('rememberMe', rememberMe);
             if (rememberMe) {
                 localStorage.setItem('rememberedUsername', username);
+            } else {
+                localStorage.removeItem('rememberedUsername');
             }
             
             // Create session
             sessionStorage.setItem('currentUser', JSON.stringify({
                 username: user.username,
                 phone: user.phone,
+                email: user.email,
                 name: user.name,
                 isLoggedIn: true,
                 balance: user.balance || 0
@@ -91,7 +103,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // Redirect to dashboard
             window.location.href = 'dashboard.html';
         } else {
-            showError('Invalid username/phone or password');
+            showError('Invalid email/phone or password');
         }
     });
 
@@ -115,6 +127,7 @@ document.addEventListener('DOMContentLoaded', function() {
         e.preventDefault();
         const phone = document.getElementById('resetPhone').value.trim();
         
+        // Validate Indian phone number
         if (!/^[6-9]\d{9}$/.test(phone)) {
             alert('Please enter a valid 10-digit Indian phone number');
             return;
@@ -133,5 +146,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function showError(message) {
         loginError.textContent = message;
+        loginError.classList.add('animate__animated', 'animate__headShake');
+        setTimeout(() => {
+            loginError.classList.remove('animate__animated', 'animate__headShake');
+        }, 1000);
     }
+
+    // Initialize the form
+    initForm();
 });
