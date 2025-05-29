@@ -35,12 +35,10 @@ document.addEventListener('DOMContentLoaded', function() {
     const firebaseConfig = {
         apiKey: "AIzaSyCZ8xdSzT1kNBFn1OKzjmHFE1Y_HRONJ4Q",
         authDomain: "earn-with-skr-b3eb0.firebaseapp.com",
-        databaseURL: "https://earn-with-skr-b3eb0-default-rtdb.firebaseio.com",
         projectId: "earn-with-skr-b3eb0",
-        storageBucket: "earn-with-skr-b3eb0.firebasestorage.app",
+        storageBucket: "earn-with-skr-b3eb0.appspot.com",
         messagingSenderId: "632843327266",
-        appId: "1:632843327266:web:57c5ad6d78fae0ad0b377b",
-        measurementId: "G-M44HFP9M3Y"
+        appId: "1:632843327266:web:57c5ad6d78fae0ad0b377b"
     };
 
     // Initialize Firebase
@@ -64,15 +62,12 @@ document.addEventListener('DOMContentLoaded', function() {
             recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
                 'size': 'invisible',
                 'callback': (response) => {
-                    // reCAPTCHA solved, allow sending OTP
                     sendOtp();
                 },
                 'expired-callback': () => {
-                    console.log('reCAPTCHA expired');
                     resetOtpButton();
                 }
             });
-            console.log('reCAPTCHA initialized');
         } catch (error) {
             console.error('reCAPTCHA initialization error:', error);
             showError(phoneError, 'Failed to initialize security check. Please refresh the page.');
@@ -125,7 +120,6 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Trigger reCAPTCHA
         recaptchaVerifier.verify().catch(error => {
-            console.error('reCAPTCHA verification error:', error);
             showError(phoneError, 'Security check failed. Please try again.');
             resetOtpButton();
         });
@@ -174,14 +168,18 @@ document.addEventListener('DOMContentLoaded', function() {
 
         try {
             // Verify OTP
-            const userCredential = await confirmationResult.confirm(otpInput.value);
-            isPhoneVerified = true;
+            await confirmationResult.confirm(otpInput.value);
             
-            // Create user account
-            await createUserAccount();
+            // Create account
+            const accountCreated = await createUserAccount();
+            if (!accountCreated) return;
             
-            // Redirect to dashboard
-            redirectToDashboard();
+            // Show success and redirect
+            showTemporaryMessage('Registration successful!', 'success');
+            setTimeout(() => {
+                window.location.href = 'dashboard.html';
+            }, 1500);
+            
         } catch (error) {
             handleOtpVerificationError(error);
         } finally {
@@ -225,7 +223,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Focus OTP input
                 setTimeout(() => otpInput.focus(), 500);
                 
-                console.log('OTP sent successfully to', formattedPhone);
                 showTemporaryMessage('OTP sent to your mobile number', 'success');
             })
             .catch((error) => {
@@ -262,33 +259,37 @@ document.addEventListener('DOMContentLoaded', function() {
             username,
             name,
             phone,
-            password: await hashPassword(password),
+            password: btoa(password), // Base64 encoding
             isVerified: true,
+            balance: 0,
             joinedDate: new Date().toISOString()
         };
 
-        // Save to localStorage (in a real app, use backend API)
+        // Save to localStorage
         let users = JSON.parse(localStorage.getItem('users')) || [];
+        
+        // Check if user already exists
+        const userExists = users.some(u => u.phone === phone || u.username === username);
+        if (userExists) {
+            showError(phoneError, 'User already registered');
+            return false;
+        }
+        
         users.push(user);
-        localStorage.setItem('users', JSON.stringify(user));
+        localStorage.setItem('users', JSON.stringify(users));
 
-        // Save session
+        // Save current session
         sessionStorage.setItem('currentUser', JSON.stringify({
             username,
             phone,
             name,
-            isLoggedIn: true
+            isLoggedIn: true,
+            balance: 0
         }));
+
+        return true;
     }
 
-    function redirectToDashboard() {
-        showTemporaryMessage('Registration successful! Redirecting...', 'success');
-        setTimeout(() => {
-            window.location.href = 'page5.html';
-        }, 1500);
-    }
-
-    // Helper Functions
     function validatePhoneNumber(phone) {
         const phoneRegex = /^[6-9]\d{9}$/;
 
@@ -302,23 +303,8 @@ document.addEventListener('DOMContentLoaded', function() {
             return false;
         }
 
-        if (isPhoneRegistered(phone)) {
-            showError(phoneError, 'This number is already registered');
-            return false;
-        }
-
         hideError(phoneError);
         return true;
-    }
-
-    function isPhoneRegistered(phone) {
-        try {
-            const users = JSON.parse(localStorage.getItem('users')) || [];
-            return users.some(user => user.phone === phone);
-        } catch (error) {
-            console.error('Error checking phone registration:', error);
-            return false;
-        }
     }
 
     function validateUsername(username) {
@@ -467,7 +453,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function handleOtpError(error) {
-        console.error('OTP Error:', error);
         let errorMessage = 'Failed to send OTP. Please try again.';
 
         switch (error.code) {
@@ -489,7 +474,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function handleOtpVerificationError(error) {
-        console.error('OTP Verification Error:', error);
         let errorMessage = 'Invalid OTP. Please try again.';
 
         switch (error.code) {
@@ -519,15 +503,6 @@ document.addEventListener('DOMContentLoaded', function() {
             tempMsg.classList.add('fade-out');
             setTimeout(() => tempMsg.remove(), 500);
         }, 3000);
-    }
-
-    async function hashPassword(password) {
-        // Simple hashing for demo (use proper hashing in production)
-        const encoder = new TextEncoder();
-        const data = encoder.encode(password + 'skr_salt'); // Add salt
-        const hashBuffer = await crypto.subtle.digest('SHA-256', data);
-        const hashArray = Array.from(new Uint8Array(hashBuffer));
-        return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
     }
 
     // Initialize the application
