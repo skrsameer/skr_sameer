@@ -159,6 +159,11 @@ h1 {
     justify-content: center;
     align-items: center;
     gap: 10px;
+    transition: background 0.3s;
+}
+
+.login-btn:hover {
+    background: var(--primary-dark);
 }
 
 .error-message {
@@ -200,6 +205,11 @@ h1 {
     align-items: center;
     color: white;
     font-size: 18px;
+    transition: transform 0.3s;
+}
+
+.social-icon:hover {
+    transform: scale(1.1);
 }
 
 .social-icon.google {
@@ -254,6 +264,11 @@ h1 {
     font-size: 28px;
     font-weight: bold;
     cursor: pointer;
+    transition: color 0.3s;
+}
+
+.close-modal:hover {
+    color: var(--text-color);
 }
 
 .submit-btn {
@@ -267,10 +282,19 @@ h1 {
     font-weight: 600;
     cursor: pointer;
     margin-top: 20px;
+    transition: background 0.3s;
+}
+
+.submit-btn:hover {
+    background: var(--primary-dark);
 }
 
 @media (max-width: 480px) {
     .login-card {
         padding: 30px 20px;
+    }
+    
+    h1 {
+        font-size: 1.8rem;
     }
 }
