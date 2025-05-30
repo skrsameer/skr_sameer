@@ -28,17 +28,16 @@ document.addEventListener('DOMContentLoaded', function() {
     let otpExpiryTime = 0;
     let otpTimerInterval;
     let recaptchaVerifier;
-    let isPhoneVerified = false;
     let isOtpSent = false;
 
     // Initialize Firebase
     const firebaseConfig = {
-        apiKey: "AIzaSyCZ8xdSzT1kNBFn1OKzjmHFE1Y_HRONJ4Q",
-        authDomain: "earn-with-skr-b3eb0.firebaseapp.com",
-        projectId: "earn-with-skr-b3eb0",
-        storageBucket: "earn-with-skr-b3eb0.appspot.com",
-        messagingSenderId: "632843327266",
-        appId: "1:632843327266:web:57c5ad6d78fae0ad0b377b"
+        apiKey: "YOUR_API_KEY",
+        authDomain: "YOUR_AUTH_DOMAIN",
+        projectId: "YOUR_PROJECT_ID",
+        storageBucket: "YOUR_STORAGE_BUCKET",
+        messagingSenderId: "YOUR_SENDER_ID",
+        appId: "YOUR_APP_ID"
     };
 
     // Initialize Firebase
@@ -177,7 +176,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // Show success and redirect
             showTemporaryMessage('Registration successful!', 'success');
             setTimeout(() => {
-                window.location.href = 'dashboard.html';
+                window.location.href = 'page5.html';
             }, 1500);
             
         } catch (error) {
