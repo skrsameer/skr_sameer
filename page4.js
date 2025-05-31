@@ -15,6 +15,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Variables
     let resetUser = null;
+    const mockOtp = '123456'; // For demo purposes only
 
     // Initialize form labels and remember me
     function init() {
