@@ -20,57 +20,20 @@ document.addEventListener('DOMContentLoaded', function() {
     const confirmPasswordInput = document.getElementById('confirmPassword');
     const strengthMeter = document.querySelector('.strength-meter');
     const strengthText = document.querySelector('.strength-text');
-    const recaptchaContainer = document.getElementById('recaptcha-container');
     const otpLoader = document.getElementById('otpLoader');
+    const termsCheckbox = document.getElementById('terms');
 
     // Variables
-    let confirmationResult;
     let otpExpiryTime = 0;
     let otpTimerInterval;
-    let recaptchaVerifier;
     let isOtpSent = false;
-
-    // Initialize Firebase
-    const firebaseConfig = {
-        apiKey: "YOUR_API_KEY",
-        authDomain: "YOUR_AUTH_DOMAIN",
-        projectId: "YOUR_PROJECT_ID",
-        storageBucket: "YOUR_STORAGE_BUCKET",
-        messagingSenderId: "YOUR_SENDER_ID",
-        appId: "YOUR_APP_ID"
-    };
-
-    // Initialize Firebase
-    if (!firebase.apps.length) {
-        firebase.initializeApp(firebaseConfig);
-    }
-    const auth = firebase.auth();
+    let mockOtp = '123456'; // For demo purposes only
 
     // Initialize application
     function init() {
         continueBtn.disabled = true;
         otpGroup.style.display = 'none';
-        recaptchaContainer.style.display = 'none';
-        initializeRecaptcha();
         setupEventListeners();
-    }
-
-    // Initialize reCAPTCHA
-    function initializeRecaptcha() {
-        try {
-            recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
-                'size': 'invisible',
-                'callback': (response) => {
-                    sendOtp();
-                },
-                'expired-callback': () => {
-                    resetOtpButton();
-                }
-            });
-        } catch (error) {
-            console.error('reCAPTCHA initialization error:', error);
-            showError(phoneError, 'Failed to initialize security check. Please refresh the page.');
-        }
     }
 
     // Setup event listeners
@@ -92,7 +55,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // Form Fields Validation
         document.getElementById('username').addEventListener('input', onUsernameInput);
         phoneInput.addEventListener('input', onPhoneInput);
-        document.getElementById('terms').addEventListener('change', updateContinueButtonState);
+        termsCheckbox.addEventListener('change', updateContinueButtonState);
 
         // Form Submission
         form.addEventListener('submit', onFormSubmit);
@@ -116,12 +79,24 @@ document.addEventListener('DOMContentLoaded', function() {
         // Show loading state
         sendOtpBtn.disabled = true;
         document.getElementById('btnText').textContent = 'Sending...';
-        
-        // Trigger reCAPTCHA
-        recaptchaVerifier.verify().catch(error => {
-            showError(phoneError, 'Security check failed. Please try again.');
+        otpLoader.style.display = 'block';
+
+        // Simulate OTP sending (replace with actual API call in production)
+        setTimeout(() => {
+            otpGroup.style.display = 'block';
+            startOtpTimer();
+            isOtpSent = true;
+            
+            // Scroll to OTP field
+            otpGroup.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            
+            // Focus OTP input
+            setTimeout(() => otpInput.focus(), 500);
+            
+            showTemporaryMessage('OTP sent to your mobile number', 'success');
+            otpLoader.style.display = 'none';
             resetOtpButton();
-        });
+        }, 1500);
     }
 
     function onOtpInput() {
@@ -153,7 +128,7 @@ document.addEventListener('DOMContentLoaded', function() {
         updateContinueButtonState();
     }
 
-    async function onFormSubmit(e) {
+    function onFormSubmit(e) {
         e.preventDefault();
         
         // Validate all fields
@@ -161,29 +136,21 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
-        // Show loading state
-        continueBtn.disabled = true;
-        otpLoader.style.display = 'block';
-
-        try {
-            // Verify OTP
-            await confirmationResult.confirm(otpInput.value);
-            
-            // Create account
-            const accountCreated = await createUserAccount();
-            if (!accountCreated) return;
-            
-            // Show success and redirect
-            showTemporaryMessage('Registration successful!', 'success');
-            setTimeout(() => {
-                window.location.href = 'page5.html';
-            }, 1500);
-            
-        } catch (error) {
-            handleOtpVerificationError(error);
-        } finally {
-            otpLoader.style.display = 'none';
+        // Verify OTP (mock verification for demo)
+        if (otpInput.value !== mockOtp) {
+            showError(otpError, 'Invalid OTP. Please try again.');
+            return;
         }
+
+        // Create account
+        const accountCreated = createUserAccount();
+        if (!accountCreated) return;
+        
+        // Show success and redirect
+        showTemporaryMessage('Registration successful!', 'success');
+        setTimeout(() => {
+            window.location.href = 'page4.html'; // Redirect to login page
+        }, 1500);
     }
 
     function onTermsLinkClick(e) {
@@ -202,42 +169,11 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Core Functions
-    function sendOtp() {
-        const phone = phoneInput.value.trim();
-        const formattedPhone = `+91${phone}`;
-
-        // Show loading state
-        otpLoader.style.display = 'block';
-
-        auth.signInWithPhoneNumber(formattedPhone, recaptchaVerifier)
-            .then((result) => {
-                confirmationResult = result;
-                otpGroup.style.display = 'block';
-                startOtpTimer();
-                isOtpSent = true;
-                
-                // Scroll to OTP field
-                otpGroup.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                
-                // Focus OTP input
-                setTimeout(() => otpInput.focus(), 500);
-                
-                showTemporaryMessage('OTP sent to your mobile number', 'success');
-            })
-            .catch((error) => {
-                handleOtpError(error);
-            })
-            .finally(() => {
-                otpLoader.style.display = 'none';
-                resetOtpButton();
-            });
-    }
-
     function validateAllFields() {
         const usernameValid = validateUsername(document.getElementById('username').value.trim());
         const phoneValid = validatePhoneNumber(phoneInput.value.trim());
         const passwordValid = validatePassword();
-        const termsChecked = document.getElementById('terms').checked;
+        const termsChecked = termsCheckbox.checked;
         const otpValid = otpInput.value.length === 6;
 
         if (!usernameValid || !phoneValid || !passwordValid || !termsChecked || !otpValid) {
@@ -247,7 +183,7 @@ document.addEventListener('DOMContentLoaded', function() {
         return true;
     }
 
-    async function createUserAccount() {
+    function createUserAccount() {
         const username = document.getElementById('username').value.trim();
         const name = document.getElementById('name').value.trim();
         const phone = phoneInput.value.trim();
@@ -276,16 +212,6 @@ document.addEventListener('DOMContentLoaded', function() {
         
         users.push(user);
         localStorage.setItem('users', JSON.stringify(users));
-
-        // Save current session
-        sessionStorage.setItem('currentUser', JSON.stringify({
-            username,
-            phone,
-            name,
-            isLoggedIn: true,
-            balance: 0
-        }));
-
         return true;
     }
 
@@ -427,7 +353,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const usernameValid = validateUsername(document.getElementById('username').value.trim());
         const phoneValid = validatePhoneNumber(phoneInput.value.trim());
         const passwordValid = validatePassword();
-        const termsChecked = document.getElementById('terms').checked;
+        const termsChecked = termsCheckbox.checked;
         const otpValid = otpInput.value.length === 6;
 
         continueBtn.disabled = !(usernameValid && phoneValid && passwordValid && termsChecked && otpValid && isOtpSent);
@@ -449,47 +375,6 @@ document.addEventListener('DOMContentLoaded', function() {
     function resetOtpButton() {
         sendOtpBtn.disabled = false;
         document.getElementById('btnText').textContent = isOtpSent ? 'Resend OTP' : 'Send OTP';
-    }
-
-    function handleOtpError(error) {
-        let errorMessage = 'Failed to send OTP. Please try again.';
-
-        switch (error.code) {
-            case 'auth/too-many-requests':
-                errorMessage = 'Too many attempts. Please try again later.';
-                break;
-            case 'auth/invalid-phone-number':
-                errorMessage = 'Invalid phone number format.';
-                break;
-            case 'auth/quota-exceeded':
-                errorMessage = 'OTP quota exceeded. Try again later.';
-                break;
-            case 'auth/captcha-check-failed':
-                errorMessage = 'Security check failed. Please refresh the page.';
-                break;
-        }
-
-        showError(phoneError, errorMessage);
-    }
-
-    function handleOtpVerificationError(error) {
-        let errorMessage = 'Invalid OTP. Please try again.';
-
-        switch (error.code) {
-            case 'auth/invalid-verification-code':
-                errorMessage = 'Invalid OTP code.';
-                break;
-            case 'auth/code-expired':
-                errorMessage = 'OTP expired. Please request a new one.';
-                isOtpSent = false;
-                break;
-            case 'auth/too-many-requests':
-                errorMessage = 'Too many attempts. Try again later.';
-                break;
-        }
-
-        showError(otpError, errorMessage);
-        otpInput.focus();
     }
 
     function showTemporaryMessage(message, type) {
