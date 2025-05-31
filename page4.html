@@ -62,7 +62,7 @@
             </div>
             
             <p class="signup-link animate__animated animate__fadeIn animate__delay-3s">
-                Don't have an account? <a href="page2.html">Sign up</a>
+                Don't have an account? <a href="page3.html">Sign up</a>
             </p>
         </div>
     </div>
@@ -80,6 +80,29 @@
                     <div class="underline"></div>
                 </div>
                 <button type="submit" class="submit-btn">Send OTP</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Reset Password Modal -->
+    <div id="resetPasswordModal" class="modal">
+        <div class="modal-content animate__animated animate__fadeInDown">
+            <span class="close-modal">&times;</span>
+            <h2>Create New Password</h2>
+            <form id="resetPasswordForm">
+                <div class="form-group">
+                    <i class="fas fa-lock input-icon"></i>
+                    <input type="password" id="newPassword" placeholder=" " required>
+                    <label for="newPassword">New Password</label>
+                    <div class="underline"></div>
+                </div>
+                <div class="form-group">
+                    <i class="fas fa-lock input-icon"></i>
+                    <input type="password" id="confirmNewPassword" placeholder=" " required>
+                    <label for="confirmNewPassword">Confirm New Password</label>
+                    <div class="underline"></div>
+                </div>
+                <button type="submit" class="submit-btn">Update Password</button>
             </form>
         </div>
     </div>
