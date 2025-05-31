@@ -19,7 +19,7 @@
         <form id="registrationForm">
             <div class="form-group">
                 <label for="username">Username *</label>
-                <input type="text" id="username" placeholder="Enter unique username" required>
+                <input type="text" id="username" placeholder="4-20 characters (letters, numbers, _)" required>
                 <i class="fas fa-user input-icon"></i>
                 <p id="usernameError" class="error-message"></p>
             </div>
@@ -41,7 +41,6 @@
                     </button>
                 </div>
                 <p id="phoneError" class="error-message"></p>
-                <div id="recaptcha-container"></div>
             </div>
 
             <div class="form-group" id="otpGroup" style="display:none;">
@@ -108,9 +107,6 @@
         </div>
     </div>
 
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
     <script src="page3.js"></script>
 </body>
 </html>
