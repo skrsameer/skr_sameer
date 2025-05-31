@@ -3,123 +3,110 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Is Watching Ads for Money Real? Truth Revealed - Earn With SKR</title>
-    <meta name="description" content="Scam or legit? We investigated 50+ ad platforms with proof. Learn how to identify fake programs and protect your earnings.">
-    <style>
-        .truth-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 25px 0;
-        }
-        .truth-table th {
-            background: #4CAF50;
-            color: white;
-            padding: 12px;
-            text-align: left;
-        }
-        .truth-table td {
-            padding: 10px;
-            border-bottom: 1px solid #ddd;
-        }
-        .truth-table tr:nth-child(even) {
-            background: #f9f9f9;
-        }
-        .scam-signs {
-            background: #FFEBEE;
-            border-left: 4px solid #F44336;
-            padding: 20px;
-            margin: 25px 0;
-        }
-        .legit-signs {
-            background: #E8F5E9;
-            border-left: 4px solid #4CAF50;
-            padding: 20px;
-            margin: 25px 0;
-        }
-    </style>
+    <title>Login - SKR App</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="page4.css">
 </head>
 <body>
-    <h1>Is Watching Ads for Money Real? Scam vs Legit (2024 Truth)</h1>
-    
-    <img src="../assets/images/scam-vs-legit.jpg" alt="Scam vs legit ad platforms" title="Our investigation results">
-
-    <div class="payment-proof">
-        <h3>🔍 Our 3-Month Investigation Findings</h3>
-        <p>Tested 53 platforms | Only 12 were legit | ₹28,500 earned from real ones</p>
+    <div class="login-container">
+        <div class="login-card">
+            <div class="logo-container">
+                <img src="Logo.png" alt="SKR Logo" class="logo animate__animated animate__pulse">
+            </div>
+            
+            <h1 class="animate__animated animate__fadeInDown">Welcome Back!</h1>
+            <p class="subtitle animate__animated animate__fadeIn animate__delay-1s">Login to access your dashboard</p>
+            
+            <form id="loginForm" class="animate__animated animate__fadeIn animate__delay-1.5s">
+                <div class="form-group">
+                    <i class="fas fa-user input-icon"></i>
+                    <input type="text" id="loginUsername" placeholder=" " required>
+                    <label for="loginUsername">Username or Phone</label>
+                    <div class="underline"></div>
+                </div>
+                
+                <div class="form-group">
+                    <i class="fas fa-lock input-icon"></i>
+                    <input type="password" id="loginPassword" placeholder=" " required>
+                    <label for="loginPassword">Password</label>
+                    <i class="fas fa-eye toggle-password" id="togglePassword"></i>
+                    <div class="underline"></div>
+                </div>
+                
+                <div class="form-options">
+                    <div class="remember-me">
+                        <input type="checkbox" id="rememberMe">
+                        <label for="rememberMe">Remember me</label>
+                    </div>
+                    <a href="#" id="forgotPassword">Forgot Password?</a>
+                </div>
+                
+                <button type="submit" class="login-btn animate__animated animate__fadeInUp animate__delay-2s">
+                    <span>Login</span>
+                    <i class="fas fa-arrow-right"></i>
+                </button>
+                
+                <p id="loginError" class="error-message"></p>
+            </form>
+            
+            <div class="alternative-login animate__animated animate__fadeIn animate__delay-2.5s">
+                <div class="divider">
+                    <span>Or login with</span>
+                </div>
+                <div class="social-icons">
+                    <a href="#" class="social-icon google"><i class="fab fa-google"></i></a>
+                    <a href="#" class="social-icon facebook"><i class="fab fa-facebook-f"></i></a>
+                </div>
+            </div>
+            
+            <p class="signup-link animate__animated animate__fadeIn animate__delay-3s">
+                Don't have an account? <a href="page3.html">Sign up</a>
+            </p>
+        </div>
     </div>
 
-    <h2>How We Verified</h2>
-    <ol>
-        <li>Created accounts on all platforms</li>
-        <li>Reached minimum withdrawal on each</li>
-        <li>Tracked actual payments received</li>
-        <li>Analyzed company registration documents</li>
-    </ol>
-
-    <h2>Scam vs Legit Comparison</h2>
-    <table class="truth-table">
-        <tr>
-            <th>Feature</th>
-            <th>Legit Platforms</th>
-            <th>Scam Platforms</th>
-        </tr>
-        <tr>
-            <td>Registration Fee</td>
-            <td>Free</td>
-            <td>₹99-₹500 "activation charge"</td>
-        </tr>
-        <tr>
-            <td>Withdrawal Proof</td>
-            <td>Publicly shared by users</td>
-            <td>Only edited screenshots</td>
-        </tr>
-        <tr>
-            <td>Company Address</td>
-            <td>Verifiable office location</td>
-            <td>Only contact form</td>
-        </tr>
-    </table>
-
-    <div class="scam-signs">
-        <h3>🚨 5 Red Flags of Scam Platforms</h3>
-        <ol>
-            <li><strong>"Guaranteed ₹1000/day"</strong> claims (Real earnings are ₹200-₹500)</li>
-            <li>No customer support phone number</li>
-            <li>Asking for OTP/bank details during signup</li>
-            <li>Fake celebrity endorsements</li>
-            <li>Payment delays beyond 7 days</li>
-        </ol>
+    <!-- Forgot Password Modal -->
+    <div id="forgotPasswordModal" class="modal">
+        <div class="modal-content animate__animated animate__fadeInDown">
+            <span class="close-modal">&times;</span>
+            <h2>Reset Password</h2>
+            <form id="forgotPasswordForm">
+                <div class="form-group">
+                    <i class="fas fa-phone input-icon"></i>
+                    <input type="tel" id="resetPhone" placeholder=" " required>
+                    <label for="resetPhone">Registered Phone Number</label>
+                    <div class="underline"></div>
+                </div>
+                <button type="submit" class="submit-btn">Send OTP</button>
+            </form>
+        </div>
     </div>
 
-    <div class="legit-signs">
-        <h3>✅ 5 Signs of Legit Platforms</h3>
-        <ol>
-            <li>Instant Paytm/UPI withdrawals</li>
-            <li>Active social media with user testimonials</li>
-            <li>Clear terms & conditions</li>
-            <li>Google Play Store/App Store presence</li>
-            <li>Minimum payout under ₹200</li>
-        </ol>
+    <!-- Reset Password Modal -->
+    <div id="resetPasswordModal" class="modal">
+        <div class="modal-content animate__animated animate__fadeInDown">
+            <span class="close-modal">&times;</span>
+            <h2>Create New Password</h2>
+            <form id="resetPasswordForm">
+                <div class="form-group">
+                    <i class="fas fa-lock input-icon"></i>
+                    <input type="password" id="newPassword" placeholder=" " required>
+                    <label for="newPassword">New Password</label>
+                    <div class="underline"></div>
+                </div>
+                <div class="form-group">
+                    <i class="fas fa-lock input-icon"></i>
+                    <input type="password" id="confirmNewPassword" placeholder=" " required>
+                    <label for="confirmNewPassword">Confirm New Password</label>
+                    <div class="underline"></div>
+                </div>
+                <button type="submit" class="submit-btn">Update Password</button>
+            </form>
+        </div>
     </div>
 
-    <h2>Our Verified Legit List</h2>
-    <ul>
-        <li><strong>Earn With SKR</strong> (₹100 min withdrawal)</li>
-        <li>Swagbucks (₹300 min)</li>
-        <li>CashKaro (₹250 min)</li>
-    </ul>
-
-    <div class="warning">
-        <h3>⚠️ Most Reported Scams (June 2024)</h3>
-        <p>1. EarnKaro - Pays first 2 withdrawals then blocks account<br>
-        2. CashMama - Deducts 50% as "processing fee"</p>
-    </div>
-
-    <h2>Protection Tips</h2>
-    <ul>
-        <li>Always start with <strong>small withdrawals</strong></li>
-        <li>Use <strong>separate UPI ID</strong> for ad earnings</li>
-        <li>Check <a href="#">user reviews</a> before joining</li>
-    </ul>
+    <script src="page4.js"></script>
 </body>
 </html>
