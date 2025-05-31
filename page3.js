@@ -1,66 +1,67 @@
 document.addEventListener('DOMContentLoaded', function() {
     // DOM Elements
     const form = document.getElementById('registrationForm');
-    const sendOtpBtn = document.getElementById('sendOtpBtn');
+    const usernameInput = document.getElementById('username');
+    const nameInput = document.getElementById('name');
     const phoneInput = document.getElementById('phone');
     const otpInput = document.getElementById('otp');
-    const otpGroup = document.getElementById('otpGroup');
-    const otpError = document.getElementById('otpError');
-    const phoneError = document.getElementById('phoneError');
-    const passwordError = document.getElementById('passwordError');
+    const passwordInput = document.getElementById('password');
+    const confirmPasswordInput = document.getElementById('confirmPassword');
+    const termsCheckbox = document.getElementById('terms');
+    const sendOtpBtn = document.getElementById('sendOtpBtn');
     const continueBtn = document.getElementById('continueBtn');
+    const otpGroup = document.getElementById('otpGroup');
     const otpTimer = document.getElementById('otpTimer');
+    const otpLoader = document.getElementById('otpLoader');
+    const togglePassword = document.getElementById('togglePassword');
+    const toggleConfirmPassword = document.getElementById('toggleConfirmPassword');
+    const strengthMeter = document.querySelector('.strength-meter');
+    const strengthText = document.querySelector('.strength-text');
     const termsLink = document.getElementById('termsLink');
     const modal = document.getElementById('termsModal');
     const closeModal = document.querySelector('.close-modal');
     const modalCloseBtn = document.querySelector('.modal-close-btn');
-    const togglePassword = document.getElementById('togglePassword');
-    const toggleConfirmPassword = document.getElementById('toggleConfirmPassword');
-    const passwordInput = document.getElementById('password');
-    const confirmPasswordInput = document.getElementById('confirmPassword');
-    const strengthMeter = document.querySelector('.strength-meter');
-    const strengthText = document.querySelector('.strength-text');
-    const otpLoader = document.getElementById('otpLoader');
-    const termsCheckbox = document.getElementById('terms');
+
+    // Error Elements
+    const usernameError = document.getElementById('usernameError');
+    const phoneError = document.getElementById('phoneError');
+    const otpError = document.getElementById('otpError');
+    const passwordError = document.getElementById('passwordError');
 
     // Variables
     let otpExpiryTime = 0;
     let otpTimerInterval;
     let isOtpSent = false;
-    let mockOtp = '123456'; // For demo purposes only
+    let generatedOtp = '';
+    let canResendOtp = true;
 
-    // Initialize application
+    // Initialize the application
     function init() {
-        continueBtn.disabled = true;
-        otpGroup.style.display = 'none';
         setupEventListeners();
+        updateContinueButtonState();
     }
 
-    // Setup event listeners
+    // Setup all event listeners
     function setupEventListeners() {
-        // Send OTP Button Click
-        sendOtpBtn.addEventListener('click', onSendOtpClick);
+        // Form submission
+        form.addEventListener('submit', onFormSubmit);
 
-        // OTP Input
+        // OTP related
+        sendOtpBtn.addEventListener('click', onSendOtpClick);
         otpInput.addEventListener('input', onOtpInput);
 
-        // Toggle Password Visibility
+        // Password visibility toggle
         togglePassword.addEventListener('click', () => togglePasswordVisibility(passwordInput, togglePassword));
         toggleConfirmPassword.addEventListener('click', () => togglePasswordVisibility(confirmPasswordInput, toggleConfirmPassword));
 
-        // Password Strength Check
-        passwordInput.addEventListener('input', onPasswordInput);
-        confirmPasswordInput.addEventListener('input', onConfirmPasswordInput);
-
-        // Form Fields Validation
-        document.getElementById('username').addEventListener('input', onUsernameInput);
+        // Form validation
+        usernameInput.addEventListener('input', onUsernameInput);
         phoneInput.addEventListener('input', onPhoneInput);
+        passwordInput.addEventListener('input', onPasswordInput);
+        confirmPasswordInput.addEventListener('input', onPasswordInput);
         termsCheckbox.addEventListener('change', updateContinueButtonState);
 
-        // Form Submission
-        form.addEventListener('submit', onFormSubmit);
-
-        // Modal Handling
+        // Terms modal
         termsLink.addEventListener('click', onTermsLinkClick);
         closeModal.addEventListener('click', closeTermsModal);
         modalCloseBtn.addEventListener('click', closeTermsModal);
@@ -76,13 +77,21 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
+        if (!canResendOtp) {
+            showError(phoneError, 'Please wait before resending OTP');
+            return;
+        }
+
         // Show loading state
         sendOtpBtn.disabled = true;
         document.getElementById('btnText').textContent = 'Sending...';
         otpLoader.style.display = 'block';
 
-        // Simulate OTP sending (replace with actual API call in production)
+        // Generate and "send" OTP (simulated)
         setTimeout(() => {
+            generatedOtp = generateOTP();
+            console.log(`OTP for ${phone}: ${generatedOtp}`); // For testing
+            
             otpGroup.style.display = 'block';
             startOtpTimer();
             isOtpSent = true;
@@ -93,9 +102,16 @@ document.addEventListener('DOMContentLoaded', function() {
             // Focus OTP input
             setTimeout(() => otpInput.focus(), 500);
             
-            showTemporaryMessage('OTP sent to your mobile number', 'success');
+            showTemporaryMessage('OTP sent successfully (Demo OTP: ' + generatedOtp + ')', 'success');
             otpLoader.style.display = 'none';
             resetOtpButton();
+            
+            // Prevent immediate resend
+            canResendOtp = false;
+            setTimeout(() => {
+                canResendOtp = true;
+                document.getElementById('btnText').textContent = 'Resend OTP';
+            }, 30000); // 30 second cooldown
         }, 1500);
     }
 
@@ -107,15 +123,30 @@ document.addEventListener('DOMContentLoaded', function() {
         updateContinueButtonState();
     }
 
-    function onPasswordInput() {
-        checkPasswordStrength(passwordInput.value);
-        validatePassword();
-        updateContinueButtonState();
-    }
+    function onFormSubmit(e) {
+        e.preventDefault();
+        
+        // Validate all fields
+        if (!validateAllFields()) {
+            return;
+        }
 
-    function onConfirmPasswordInput() {
-        validatePassword();
-        updateContinueButtonState();
+        // Verify OTP
+        if (otpInput.value !== generatedOtp) {
+            showError(otpError, 'Invalid OTP. Please try again.');
+            otpInput.focus();
+            return;
+        }
+
+        // Create account
+        const accountCreated = createUserAccount();
+        if (!accountCreated) return;
+        
+        // Show success and redirect
+        showTemporaryMessage('Registration successful!', 'success');
+        setTimeout(() => {
+            window.location.href = 'page5.html'; // Redirect to login page
+        }, 1500);
     }
 
     function onUsernameInput() {
@@ -128,29 +159,10 @@ document.addEventListener('DOMContentLoaded', function() {
         updateContinueButtonState();
     }
 
-    function onFormSubmit(e) {
-        e.preventDefault();
-        
-        // Validate all fields
-        if (!validateAllFields()) {
-            return;
-        }
-
-        // Verify OTP (mock verification for demo)
-        if (otpInput.value !== mockOtp) {
-            showError(otpError, 'Invalid OTP. Please try again.');
-            return;
-        }
-
-        // Create account
-        const accountCreated = createUserAccount();
-        if (!accountCreated) return;
-        
-        // Show success and redirect
-        showTemporaryMessage('Registration successful!', 'success');
-        setTimeout(() => {
-            window.location.href = 'page4.html'; // Redirect to login page
-        }, 1500);
+    function onPasswordInput() {
+        checkPasswordStrength(passwordInput.value);
+        validatePassword();
+        updateContinueButtonState();
     }
 
     function onTermsLinkClick(e) {
@@ -158,19 +170,13 @@ document.addEventListener('DOMContentLoaded', function() {
         modal.style.display = 'block';
     }
 
-    function closeTermsModal() {
-        modal.style.display = 'none';
-    }
-
-    function onWindowClick(e) {
-        if (e.target === modal) {
-            closeTermsModal();
-        }
-    }
-
     // Core Functions
+    function generateOTP() {
+        return Math.floor(100000 + Math.random() * 900000).toString();
+    }
+
     function validateAllFields() {
-        const usernameValid = validateUsername(document.getElementById('username').value.trim());
+        const usernameValid = validateUsername(usernameInput.value.trim());
         const phoneValid = validatePhoneNumber(phoneInput.value.trim());
         const passwordValid = validatePassword();
         const termsChecked = termsCheckbox.checked;
@@ -184,8 +190,8 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function createUserAccount() {
-        const username = document.getElementById('username').value.trim();
-        const name = document.getElementById('name').value.trim();
+        const username = usernameInput.value.trim();
+        const name = nameInput.value.trim();
         const phone = phoneInput.value.trim();
         const password = passwordInput.value;
 
@@ -194,7 +200,7 @@ document.addEventListener('DOMContentLoaded', function() {
             username,
             name,
             phone,
-            password: btoa(password), // Base64 encoding
+            password: btoa(password), // Base64 encoding (demo only - use proper hashing in production)
             isVerified: true,
             balance: 0,
             joinedDate: new Date().toISOString()
@@ -233,7 +239,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function validateUsername(username) {
-        const usernameError = document.getElementById('usernameError');
         const usernameRegex = /^[a-zA-Z0-9_]{4,20}$/;
 
         if (!username) {
@@ -326,6 +331,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 otpTimer.textContent = 'OTP expired. Please request a new one.';
                 clearInterval(otpTimerInterval);
                 isOtpSent = false;
+                updateContinueButtonState();
                 return;
             }
 
@@ -350,7 +356,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function updateContinueButtonState() {
-        const usernameValid = validateUsername(document.getElementById('username').value.trim());
+        const usernameValid = validateUsername(usernameInput.value.trim());
         const phoneValid = validatePhoneNumber(phoneInput.value.trim());
         const passwordValid = validatePassword();
         const termsChecked = termsCheckbox.checked;
@@ -374,7 +380,17 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function resetOtpButton() {
         sendOtpBtn.disabled = false;
-        document.getElementById('btnText').textContent = isOtpSent ? 'Resend OTP' : 'Send OTP';
+        document.getElementById('btnText').textContent = 'Resend OTP';
+    }
+
+    function closeTermsModal() {
+        modal.style.display = 'none';
+    }
+
+    function onWindowClick(e) {
+        if (e.target === modal) {
+            closeTermsModal();
+        }
     }
 
     function showTemporaryMessage(message, type) {
