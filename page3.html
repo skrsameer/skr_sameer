@@ -6,12 +6,10 @@
     <title>Create New Account - SKR</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="page3.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <img src="Logo.png" alt="SKR Logo" class="logo">
             <h1>Create New Account</h1>
             <p class="subtitle">Join our community today</p>
         </div>
@@ -34,7 +32,7 @@
                 <label for="phone">Mobile Number *</label>
                 <div class="phone-input">
                     <span>+91</span>
-                    <input type="tel" id="phone" placeholder="Enter 10-digit number" required maxlength="10">
+                    <input type="tel" id="phone" placeholder="Enter 10-digit number" maxlength="10" required>
                     <button type="button" id="sendOtpBtn" class="otp-btn">
                         <span id="btnText">Send OTP</span>
                         <i class="fas fa-paper-plane"></i>
@@ -46,7 +44,7 @@
             <div class="form-group" id="otpGroup" style="display:none;">
                 <label for="otp">OTP *</label>
                 <div class="otp-input-container">
-                    <input type="text" id="otp" maxlength="6" placeholder="Enter 6-digit OTP" required>
+                    <input type="text" id="otp" placeholder="Enter 6-digit OTP" maxlength="6" required>
                     <div class="otp-loader" id="otpLoader"></div>
                 </div>
                 <p id="otpError" class="error-message"></p>
@@ -78,7 +76,7 @@
 
             <div class="form-group checkbox-group">
                 <input type="checkbox" id="terms" required>
-                <label for="terms">I agree to the <a href="#" id="termsLink">Terms of Service</a></label>
+                <label for="terms">I agree to the Terms of Service</label>
             </div>
 
             <button type="submit" id="continueBtn" class="submit-btn" disabled>
@@ -89,21 +87,6 @@
 
         <div class="footer">
             <p>Already have an account? <a href="page4.html">Sign In</a></p>
-        </div>
-    </div>
-
-    <!-- Terms Modal -->
-    <div id="termsModal" class="modal">
-        <div class="modal-content">
-            <span class="close-modal">&times;</span>
-            <h2>Terms of Service</h2>
-            <div class="terms-content">
-                <p>1. You must be at least 18 years old to use this service.</p>
-                <p>2. Each mobile number can only be used for one account.</p>
-                <p>3. You agree to receive OTP and important account notifications via SMS.</p>
-                <p>4. We respect your privacy and will never share your personal information.</p>
-            </div>
-            <button class="modal-close-btn">I Understand</button>
         </div>
     </div>
 
