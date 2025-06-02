@@ -1,95 +1,208 @@
-body {
-  font-family: Arial, sans-serif;
-  background: #f7f7f7;
-  margin: 0;
-  padding: 0;
-}
-.container {
-  max-width: 400px;
-  margin: 50px auto;
-  background: white;
-  padding: 25px;
-  border-radius: 8px;
-  box-shadow: 0 0 10px #ccc;
-}
-h2 {
-  text-align: center;
-  margin-bottom: 20px;
-}
-input[type=text],
-input[type=password],
-input[type=tel] {
-  width: 100%;
-  padding: 10px;
-  margin: 8px 0 16px 0;
+/* Reset and basics */
+* {
   box-sizing: border-box;
 }
-button {
-  width: 100%;
-  padding: 12px;
-  background: #4caf50;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  font-size: 16px;
-  cursor: pointer;
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
 }
-button:hover {
-  background: #45a049;
-}
-#loginError {
-  color: red;
-  margin-bottom: 10px;
-  min-height: 18px;
+
+.container {
+  background: rgba(255 255 255 / 0.1);
+  padding: 2rem 2.5rem;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgb(0 0 0 / 0.3);
+  width: 360px;
   text-align: center;
+  backdrop-filter: blur(12px);
+  position: relative;
+  animation: fadeInScale 0.6s ease forwards;
 }
-.password-toggle {
-  cursor: pointer;
-  position: absolute;
-  right: 15px;
-  top: 39px;
-  user-select: none;
-  color: #555;
+
+h2 {
+  margin-bottom: 1.5rem;
+  font-weight: 700;
+  font-size: 2rem;
+  letter-spacing: 0.05em;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.4);
 }
+
+input[type="text"],
+input[type="password"],
+input[type="tel"] {
+  width: 100%;
+  padding: 12px 14px;
+  margin-bottom: 1rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  outline-offset: 2px;
+  outline-color: transparent;
+  transition: outline-color 0.3s ease;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="tel"]:focus {
+  outline-color: #a39fff;
+  background: rgba(255 255 255 / 0.2);
+  color: #fff;
+}
+
 .input-group {
   position: relative;
+  margin-bottom: 1rem;
 }
-a {
-  display: block;
-  margin-top: 10px;
-  text-align: center;
-  color: #007bff;
+
+#togglePassword {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  color: #a39fff;
+  font-weight: 600;
   cursor: pointer;
+  font-size: 0.9rem;
+  user-select: none;
+  padding: 0 5px;
+  transition: color 0.3s ease;
 }
+
+#togglePassword:hover {
+  color: #fff;
+}
+
+button[type="submit"] {
+  width: 100%;
+  background: #8360c3;
+  border: none;
+  padding: 14px 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+  border-radius: 8px;
+  cursor: pointer;
+  color: #fff;
+  letter-spacing: 0.05em;
+  transition: background-color 0.3s ease;
+  box-shadow: 0 4px 12px rgb(131 96 195 / 0.6);
+}
+
+button[type="submit"]:hover,
+button[type="submit"]:focus {
+  background: #5a39a3;
+  box-shadow: 0 6px 16px rgb(90 57 163 / 0.8);
+  outline: none;
+}
+
+a#forgotPassword {
+  margin-top: 1rem;
+  display: inline-block;
+  font-weight: 600;
+  color: #c0baff;
+  cursor: pointer;
+  user-select: none;
+  transition: color 0.3s ease;
+}
+
+a#forgotPassword:hover {
+  color: #fff;
+  text-decoration: underline;
+}
+
+.error-message {
+  min-height: 1.2rem;
+  margin-bottom: 0.7rem;
+  color: #ff6b6b;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
 /* Modal styles */
 .modal {
-  display: none;
   position: fixed;
-  z-index: 999;
-  left: 0;
+  z-index: 1000;
   top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
-  overflow: auto;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(10, 10, 10, 0.8);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
 }
+
+.modal[aria-hidden="false"] {
+  display: flex;
+  opacity: 1;
+  pointer-events: all;
+}
+
 .modal-content {
-  background: white;
-  margin: 10% auto;
-  padding: 20px;
-  border-radius: 8px;
-  max-width: 400px;
+  background: #202040;
+  padding: 2rem;
+  border-radius: 12px;
+  width: 350px;
   position: relative;
+  box-shadow: 0 8px 30px rgb(0 0 0 / 0.7);
+  animation: slideIn 0.4s ease forwards;
+  text-align: center;
 }
+
 .close-modal {
-  color: #aaa;
-  font-size: 28px;
-  font-weight: bold;
   position: absolute;
-  right: 15px;
-  top: 10px;
+  right: 16px;
+  top: 12px;
+  background: transparent;
+  border: none;
+  font-size: 28px;
+  color: #aaa;
   cursor: pointer;
+  transition: color 0.3s ease;
+  user-select: none;
 }
+
 .close-modal:hover {
-  color: black;
+  color: #fff;
+}
+
+.modal h3 {
+  margin-top: 0;
+  margin-bottom: 1.5rem;
+  font-weight: 700;
+  font-size: 1.5rem;
+  color: #ddd;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.7);
+}
+
+@keyframes fadeInScale {
+  0% {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes slideIn {
+  0% {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
