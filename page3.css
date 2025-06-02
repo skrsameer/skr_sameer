@@ -1,3 +1,4 @@
+
 :root {
     --primary-color: #6c5ce7;
     --primary-light: #a29bfe;
@@ -55,6 +56,16 @@ body {
     text-align: center;
     margin-bottom: 30px;
     animation: fadeIn 0.8s ease-out;
+}
+
+.logo {
+    width: 100px;
+    margin-bottom: 15px;
+    transition: var(--transition);
+}
+
+.logo:hover {
+    transform: scale(1.05);
 }
 
 h1 {
@@ -373,32 +384,6 @@ input:focus {
     display: none;
 }
 
-.temp-message {
-    position: fixed;
-    top: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    padding: 12px 20px;
-    border-radius: 8px;
-    color: white;
-    font-weight: 500;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    z-index: 1000;
-    animation: slideDown 0.3s ease-out;
-}
-
-.temp-message.success {
-    background-color: var(--success-color);
-}
-
-.temp-message.error {
-    background-color: var(--error-color);
-}
-
-.temp-message.fade-out {
-    animation: fadeOut 0.5s ease-out forwards;
-}
-
 /* Animations */
 @keyframes fadeIn {
     from { opacity: 0; }
@@ -406,13 +391,25 @@ input:focus {
 }
 
 @keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
+    from { 
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to { 
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 @keyframes slideDown {
-    from { opacity: 0; transform: translateY(-50px); }
-    to { opacity: 1; transform: translateY(0); }
+    from { 
+        opacity: 0;
+        transform: translateY(-50px);
+    }
+    to { 
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 @keyframes shake {
@@ -430,11 +427,6 @@ input:focus {
     50% { transform: scale(1.05); }
 }
 
-@keyframes fadeOut {
-    from { opacity: 1; }
-    to { opacity: 0; }
-}
-
 .shake {
     animation: shake 0.4s ease-in-out;
 }
@@ -448,18 +440,21 @@ input:focus {
     .container {
         padding: 20px;
     }
-
+    
     .phone-input {
         flex-direction: column;
         align-items: stretch;
     }
+    
     .phone-input span {
         border-radius: 8px 8px 0 0;
         margin-bottom: -1px;
     }
+    
     .phone-input input {
         border-radius: 0 0 8px 8px;
     }
+    
     .otp-btn {
         margin-top: 10px;
         width: 100%;
