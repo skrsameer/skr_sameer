@@ -10,12 +10,12 @@
 <body>
     <div class="container">
         <div class="header">
-            <img src="logo.png" alt="SKR Logo" class="logo">
             <h1>Create New Account</h1>
             <p class="subtitle">Join our community today</p>
         </div>
 
         <form id="registrationForm">
+            <!-- Username Field -->
             <div class="form-group">
                 <label for="username">Username *</label>
                 <input type="text" id="username" placeholder="Enter unique username" required>
@@ -23,12 +23,14 @@
                 <p id="usernameError" class="error-message"></p>
             </div>
 
+            <!-- Full Name Field -->
             <div class="form-group">
                 <label for="name">Full Name *</label>
                 <input type="text" id="name" placeholder="Enter your full name" required>
                 <i class="fas fa-id-card input-icon"></i>
             </div>
 
+            <!-- Phone Number Field -->
             <div class="form-group">
                 <label for="phone">Mobile Number *</label>
                 <div class="phone-input">
@@ -43,6 +45,7 @@
                 <div id="recaptcha-container"></div>
             </div>
 
+            <!-- OTP Field (hidden initially) -->
             <div class="form-group" id="otpGroup" style="display:none;">
                 <label for="otp">OTP *</label>
                 <div class="otp-input-container">
@@ -53,6 +56,7 @@
                 <p id="otpTimer" class="timer"></p>
             </div>
 
+            <!-- Password Fields -->
             <div class="form-group">
                 <label for="password">Password *</label>
                 <div class="password-container">
@@ -76,11 +80,13 @@
                 <p id="passwordError" class="error-message"></p>
             </div>
 
+            <!-- Terms Checkbox -->
             <div class="form-group checkbox-group">
                 <input type="checkbox" id="terms" required>
                 <label for="terms">I agree to the <a href="#" id="termsLink">Terms of Service</a></label>
             </div>
 
+            <!-- Submit Button -->
             <button type="submit" id="continueBtn" class="submit-btn" disabled>
                 <span>Continue</span>
                 <i class="fas fa-arrow-right"></i>
