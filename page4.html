@@ -1,56 +1,90 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Login - Firebase OTP Reset</title>
-<link rel="stylesheet" href="page4.css" />
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Login - Firebase OTP Reset</title>
+  <link rel="stylesheet" href="page4.css" />
+  <!-- Firebase App + Auth CDN for modular SDK -->
+  <script type="module" src="page4.js" defer></script>
 </head>
 <body>
+  <div class="container">
+    <h2>Welcome Back</h2>
+    <div id="loginError" class="error-message"></div>
+    <form id="loginForm" autocomplete="off" novalidate>
+      <input type="text" id="loginUsername" placeholder="Username" autocomplete="username" required />
+      <div class="input-group">
+        <input
+          type="password"
+          id="loginPassword"
+          placeholder="Password"
+          autocomplete="current-password"
+          required
+          minlength="6"
+        />
+        <button type="button" id="togglePassword" aria-label="Show password">Show</button>
+      </div>
+      <button type="submit" id="loginBtn">Login</button>
+    </form>
+    <a href="#" id="forgotPassword">Forgot Password?</a>
+  </div>
 
-<div class="container">
-  <h2>Login</h2>
-  <div id="loginError"></div>
-  <form id="loginForm">
-    <input type="text" id="loginUsername" placeholder="Username" required />
-    <div class="input-group">
-      <input type="password" id="loginPassword" placeholder="Password" required />
-      <span id="togglePassword" class="password-toggle">Show</span>
+  <!-- Forgot Password Modal -->
+  <div id="forgotPasswordModal" class="modal" aria-hidden="true" role="dialog" aria-labelledby="forgotPasswordTitle">
+    <div class="modal-content">
+      <button class="close-modal" id="closeForgotModal" aria-label="Close forgot password modal">&times;</button>
+      <h3 id="forgotPasswordTitle">Forgot Password</h3>
+      <form id="forgotPasswordForm" autocomplete="off" novalidate>
+        <input
+          type="tel"
+          id="resetPhone"
+          placeholder="Registered Phone Number"
+          pattern="\d{10}"
+          maxlength="10"
+          required
+          autocomplete="tel"
+        />
+        <div id="recaptcha-container"></div>
+        <button type="submit" id="sendOtpBtn">Send OTP</button>
+      </form>
     </div>
-    <button type="submit">Login</button>
-  </form>
-  <a id="forgotPassword">Forgot Password?</a>
-</div>
-
-<!-- Forgot Password Modal -->
-<div id="forgotPasswordModal" class="modal">
-  <div class="modal-content">
-    <span class="close-modal" id="closeForgotModal">&times;</span>
-    <h3>Forgot Password</h3>
-    <form id="forgotPasswordForm">
-      <input type="tel" id="resetPhone" placeholder="Enter registered phone number" pattern="[0-9]{10}" maxlength="10" required />
-      <div id="recaptcha-container"></div>
-      <button type="submit">Send OTP</button>
-    </form>
   </div>
-</div>
 
-<!-- Reset Password Modal -->
-<div id="resetPasswordModal" class="modal">
-  <div class="modal-content">
-    <span class="close-modal" id="closeResetModal">&times;</span>
-    <h3>Reset Password</h3>
-    <form id="resetPasswordForm">
-      <input type="text" id="otpInput" placeholder="Enter OTP" maxlength="6" required />
-      <input type="password" id="newPassword" placeholder="New Password" required />
-      <input type="password" id="confirmNewPassword" placeholder="Confirm New Password" required />
-      <button type="submit">Reset Password</button>
-    </form>
+  <!-- Reset Password Modal -->
+  <div id="resetPasswordModal" class="modal" aria-hidden="true" role="dialog" aria-labelledby="resetPasswordTitle">
+    <div class="modal-content">
+      <button class="close-modal" id="closeResetModal" aria-label="Close reset password modal">&times;</button>
+      <h3 id="resetPasswordTitle">Reset Password</h3>
+      <form id="resetPasswordForm" autocomplete="off" novalidate>
+        <input
+          type="text"
+          id="otpInput"
+          placeholder="Enter OTP"
+          maxlength="6"
+          pattern="\d{6}"
+          required
+          autocomplete="one-time-code"
+        />
+        <input
+          type="password"
+          id="newPassword"
+          placeholder="New Password"
+          minlength="6"
+          required
+          autocomplete="new-password"
+        />
+        <input
+          type="password"
+          id="confirmNewPassword"
+          placeholder="Confirm New Password"
+          minlength="6"
+          required
+          autocomplete="new-password"
+        />
+        <button type="submit" id="resetPasswordBtn">Reset Password</button>
+      </form>
+    </div>
   </div>
-</div>
-
-<script src="page4.js"></script>
 </body>
 </html>
