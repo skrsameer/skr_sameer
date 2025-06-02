@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const otpError = document.getElementById('otpError');
     const phoneError = document.getElementById('phoneError');
     const passwordError = document.getElementById('passwordError');
-    const continueBtn = document.getElementByI&& d('continueBtn');
+    const continueBtn = document.getElementById('continueBtn');
     const otpTimer = document.getElementById('otpTimer');
     const termsLink = document.getElementById('termsLink');
     const modal = document.getElementById('termsModal');
@@ -284,7 +284,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function redirectToDashboard() {
         showTemporaryMessage('Registration successful! Redirecting...', 'success');
         setTimeout(() => {
-            window.location.href = 'dashboard.html';
+            window.location.href = 'page5.html';
         }, 1500);
     }
 
