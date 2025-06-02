@@ -1,12 +1,12 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Firebase configuration - Replace with your actual Firebase config
+    // Replace with your Firebase config
     const firebaseConfig = {
-        apiKey: "AIzaSyDexample-example-example-example",
-        authDomain: "your-project-id.firebaseapp.com",
-        projectId: "your-project-id",
-        storageBucket: "your-project-id.appspot.com",
-        messagingSenderId: "123456789012",
-        appId: "1:123456789012:web:example1234567890"
+        apiKey: "YOUR_API_KEY",
+        authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+        projectId: "YOUR_PROJECT_ID",
+        storageBucket: "YOUR_PROJECT_ID.appspot.com",
+        messagingSenderId: "YOUR_SENDER_ID",
+        appId: "YOUR_APP_ID"
     };
 
     // Initialize Firebase
@@ -62,11 +62,9 @@ document.addEventListener('DOMContentLoaded', function() {
             recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
                 'size': 'invisible',
                 'callback': (response) => {
-                    // reCAPTCHA solved, allow to send OTP
                     sendOtp();
                 },
                 'expired-callback': () => {
-                    // Reset OTP button if reCAPTCHA expires
                     resetOtpButton();
                 }
             });
@@ -78,29 +76,16 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Setup event listeners
     function setupEventListeners() {
-        // Send OTP Button Click
         sendOtpBtn.addEventListener('click', onSendOtpClick);
-        
-        // OTP Input
         otpInput.addEventListener('input', onOtpInput);
-        
-        // Toggle Password Visibility
         togglePassword.addEventListener('click', () => togglePasswordVisibility(passwordInput, togglePassword));
         toggleConfirmPassword.addEventListener('click', () => togglePasswordVisibility(confirmPasswordInput, toggleConfirmPassword));
-        
-        // Password Strength Check
         passwordInput.addEventListener('input', onPasswordInput);
         confirmPasswordInput.addEventListener('input', onConfirmPasswordInput);
-        
-        // Form Fields Validation
         document.getElementById('username').addEventListener('input', onUsernameInput);
         phoneInput.addEventListener('input', onPhoneInput);
         document.getElementById('terms').addEventListener('change', updateContinueButtonState);
-        
-        // Form Submission
         form.addEventListener('submit', onFormSubmit);
-        
-        // Modal Handling
         termsLink.addEventListener('click', onTermsLinkClick);
         closeModal.addEventListener('click', closeTermsModal);
         modalCloseBtn.addEventListener('click', closeTermsModal);
@@ -116,11 +101,9 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
         
-        // Show loading state
         sendOtpBtn.disabled = true;
         document.getElementById('btnText').textContent = 'Sending...';
         
-        // Trigger reCAPTCHA verification
         recaptchaVerifier.verify().catch(error => {
             showError(phoneError, 'Security check failed. Please try again.');
             resetOtpButton();
@@ -159,27 +142,21 @@ document.addEventListener('DOMContentLoaded', function() {
     async function onFormSubmit(e) {
         e.preventDefault();
         
-        // Validate all fields
         if (!validateAllFields()) {
             return;
         }
         
-        // Show loading state
         continueBtn.disabled = true;
         otpLoader.style.display = 'block';
         
         try {
-            // Verify OTP
             await confirmationResult.confirm(otpInput.value);
-            
-            // Create account
             const accountCreated = await createUserAccount();
             if (!accountCreated) return;
             
-            // Show success and redirect
             showTemporaryMessage('Registration successful!', 'success');
             setTimeout(() => {
-                window.location.href = 'page5.html'; // Change to your success page
+                window.location.href = 'page5.html';
             }, 1500);
         } catch (error) {
             handleOtpVerificationError(error);
@@ -208,7 +185,6 @@ document.addEventListener('DOMContentLoaded', function() {
         const phone = phoneInput.value.trim();
         const formattedPhone = `+91${phone}`;
         
-        // Show loading state
         otpLoader.style.display = 'block';
         
         auth.signInWithPhoneNumber(formattedPhone, recaptchaVerifier)
@@ -217,13 +193,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 otpGroup.style.display = 'block';
                 startOtpTimer();
                 isOtpSent = true;
-                
-                // Scroll to OTP field
                 otpGroup.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                
-                // Focus OTP input
                 setTimeout(() => otpInput.focus(), 500);
-                
                 showTemporaryMessage('OTP sent to your mobile number', 'success');
             })
             .catch((error) => {
@@ -254,21 +225,18 @@ document.addEventListener('DOMContentLoaded', function() {
         const phone = phoneInput.value.trim();
         const password = passwordInput.value;
         
-        // Create user object
         const user = {
             username,
             name,
             phone,
-            password: btoa(password), // Simple encoding (not secure for production)
+            password: btoa(password),
             isVerified: true,
             balance: 0,
             joinedDate: new Date().toISOString()
         };
         
-        // Save to localStorage
         let users = JSON.parse(localStorage.getItem('users')) || [];
         
-        // Check if user already exists
         const userExists = users.some(u => u.phone === phone || u.username === username);
         if (userExists) {
             showError(phoneError, 'User already registered');
@@ -278,7 +246,6 @@ document.addEventListener('DOMContentLoaded', function() {
         users.push(user);
         localStorage.setItem('users', JSON.stringify(users));
         
-        // Save current session
         sessionStorage.setItem('currentUser', JSON.stringify({
             username,
             phone,
@@ -320,7 +287,6 @@ document.addEventListener('DOMContentLoaded', function() {
             return false;
         }
         
-        // Check if username exists
         const users = JSON.parse(localStorage.getItem('users')) || [];
         if (users.some(user => user.username === username)) {
             showError(usernameError, 'Username already taken');
@@ -357,16 +323,12 @@ document.addEventListener('DOMContentLoaded', function() {
     function checkPasswordStrength(password) {
         let strength = 0;
         
-        // Length check
         if (password.length >= 8) strength++;
         if (password.length >= 12) strength++;
-        
-        // Character variety checks
         if (/[A-Z]/.test(password)) strength++;
         if (/[0-9]/.test(password)) strength++;
         if (/[^A-Za-z0-9]/.test(password)) strength++;
         
-        // Update UI
         if (password.length === 0) {
             strengthMeter.style.width = '0%';
             strengthText.textContent = '';
@@ -390,7 +352,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function startOtpTimer() {
         clearInterval(otpTimerInterval);
-        otpExpiryTime = Date.now() + 5 * 60 * 1000; // 5 minutes
+        otpExpiryTime = Date.now() + 5 * 60 * 1000;
         
         function updateTimer() {
             const now = Date.now();
