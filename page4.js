@@ -1,205 +1,193 @@
-document.addEventListener('DOMContentLoaded', function() {
-    // DOM Elements
-    const loginForm = document.getElementById('loginForm');
-    const loginError = document.getElementById('loginError');
-    const togglePassword = document.getElementById('togglePassword');
-    const forgotPasswordLink = document.getElementById('forgotPassword');
-    const forgotPasswordModal = document.getElementById('forgotPasswordModal');
-    const resetPasswordModal = document.getElementById('resetPasswordModal');
-    const closeModals = document.querySelectorAll('.close-modal');
-    const forgotPasswordForm = document.getElementById('forgotPasswordForm');
-    const resetPasswordForm = document.getElementById('resetPasswordForm');
-    const resetPhoneInput = document.getElementById('resetPhone');
-    const newPasswordInput = document.getElementById('newPassword');
-    const confirmNewPasswordInput = document.getElementById('confirmNewPassword');
+// Firebase config + initialization
+const firebaseConfig = {
+  apiKey: "AIzaSyCZ8xdSzT1kNBFn1OKzjmHFE1Y_HRONJ4Q",
+  authDomain: "earn-with-skr-b3eb0.firebaseapp.com",
+  databaseURL: "https://earn-with-skr-b3eb0-default-rtdb.firebaseio.com",
+  projectId: "earn-with-skr-b3eb0",
+  storageBucket: "earn-with-skr-b3eb0.appspot.com",
+  messagingSenderId: "632843327266",
+  appId: "1:632843327266:web:57c5ad6d78fae0ad0b377b",
+  measurementId: "G-M44HFP9M3Y"
+};
 
-    // Variables
-    let resetUser = null;
-    const mockOtp = '123456'; // For demo purposes only
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
 
-    // Initialize form labels and remember me
-    function init() {
-        // Check for remembered username
-        if (localStorage.getItem('rememberMe') === 'true') {
-            const rememberedUsername = localStorage.getItem('rememberedUsername');
-            if (rememberedUsername) {
-                document.getElementById('loginUsername').value = rememberedUsername;
-                document.getElementById('rememberMe').checked = true;
-            }
-        }
+document.addEventListener("DOMContentLoaded", () => {
+  const loginForm = document.getElementById("loginForm");
+  const loginError = document.getElementById("loginError");
+  const togglePassword = document.getElementById("togglePassword");
+  const forgotPasswordLink = document.getElementById("forgotPassword");
+  const forgotPasswordModal = document.getElementById("forgotPasswordModal");
+  const resetPasswordModal = document.getElementById("resetPasswordModal");
+  const closeForgotModal = document.getElementById("closeForgotModal");
+  const closeResetModal = document.getElementById("closeResetModal");
 
-        // Initialize all input labels
-        document.querySelectorAll('.form-group input').forEach(input => {
-            const label = input.nextElementSibling;
-            if (input.value.trim() !== '') {
-                updateLabelPosition(label, true);
-            }
-            
-            input.addEventListener('input', function() {
-                updateLabelPosition(label, this.value.trim() !== '');
-            });
-        });
+  const forgotPasswordForm = document.getElementById("forgotPasswordForm");
+  const resetPasswordForm = document.getElementById("resetPasswordForm");
+
+  let resetUserPhone = null;
+
+  // Password show/hide toggle
+  togglePassword.addEventListener("click", () => {
+    const input = document.getElementById("loginPassword");
+    if (input.type === "password") {
+      input.type = "text";
+      togglePassword.textContent = "Hide";
+    } else {
+      input.type = "password";
+      togglePassword.textContent = "Show";
+    }
+  });
+
+  // Login submit
+  loginForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    const username = document.getElementById("loginUsername").value.trim();
+    const password = document.getElementById("loginPassword").value.trim();
+
+    loginError.textContent = "";
+
+    if (!username || !password) {
+      loginError.textContent = "Please fill in all fields.";
+      return;
     }
 
-    function updateLabelPosition(label, hasValue) {
-        if (hasValue) {
-            label.style.transform = 'translateY(-22px) scale(0.9)';
-            label.style.color = 'var(--primary-color)';
-            label.style.fontWeight = '500';
-            label.style.left = '15px';
-            label.style.background = 'white';
-        } else {
-            label.style.transform = '';
-            label.style.color = '';
-            label.style.fontWeight = '';
-            label.style.left = '40px';
-            label.style.background = 'transparent';
-        }
+    // Check localStorage users data
+    const users = JSON.parse(localStorage.getItem("users")) || [];
+
+    // Password stored base64 encoded (btoa)
+    const encodedPass = btoa(password);
+
+    const found = users.find(
+      (user) => user.username === username && user.password === encodedPass
+    );
+
+    if (found) {
+      sessionStorage.setItem("currentUser", JSON.stringify(found));
+      window.location.href = "page7.html"; // Redirect after successful login
+    } else {
+      loginError.textContent = "Invalid username or password.";
+    }
+  });
+
+  // Open Forgot Password Modal
+  forgotPasswordLink.addEventListener("click", () => {
+    forgotPasswordModal.style.display = "block";
+  });
+
+  // Close modals
+  closeForgotModal.addEventListener("click", () => {
+    forgotPasswordModal.style.display = "none";
+  });
+  closeResetModal.addEventListener("click", () => {
+    resetPasswordModal.style.display = "none";
+  });
+
+  // Close modal if clicked outside modal content
+  window.onclick = (event) => {
+    if (event.target === forgotPasswordModal) {
+      forgotPasswordModal.style.display = "none";
+    }
+    if (event.target === resetPasswordModal) {
+      resetPasswordModal.style.display = "none";
+    }
+  };
+
+  // Setup Recaptcha verifier globally
+  window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier(
+    "recaptcha-container",
+    {
+      size: "invisible",
+      callback: (response) => {
+        // reCAPTCHA solved, allow submit
+      },
+      "expired-callback": () => {
+        // Reset reCAPTCHA?
+      },
+    }
+  );
+  window.recaptchaVerifier.render();
+
+  // Forgot Password submit - send OTP
+  forgotPasswordForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    const phone = document.getElementById("resetPhone").value.trim();
+
+    if (!phone.match(/^\d{10}$/)) {
+      alert("Please enter a valid 10-digit phone number.");
+      return;
     }
 
-    // Toggle password visibility
-    togglePassword.addEventListener('click', function() {
-        const passwordInput = document.getElementById('loginPassword');
-        const isPassword = passwordInput.type === 'password';
-        passwordInput.type = isPassword ? 'text' : 'password';
-        this.classList.toggle('fa-eye-slash', isPassword);
-        this.classList.toggle('fa-eye', !isPassword);
-    });
+    const users = JSON.parse(localStorage.getItem("users")) || [];
+    const user = users.find((u) => u.phone === phone);
 
-    // Login form submission
-    loginForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        loginError.textContent = '';
-        
-        const username = document.getElementById('loginUsername').value.trim();
-        const password = document.getElementById('loginPassword').value;
-        const rememberMe = document.getElementById('rememberMe').checked;
-        
-        // Validate inputs
-        if (!username || !password) {
-            showError('Please fill in all fields');
-            return;
-        }
-        
-        // Get users from localStorage
-        const users = JSON.parse(localStorage.getItem('users')) || [];
-        
-        // Find matching user by username OR phone
-        const user = users.find(u => 
-            (u.username === username || u.phone === username) && 
-            u.password === btoa(password) // Compare with base64 encoded password
-        );
-        
-        if (user) {
-            // Store remember me preference
-            localStorage.setItem('rememberMe', rememberMe);
-            if (rememberMe) {
-                localStorage.setItem('rememberedUsername', username);
-            } else {
-                localStorage.removeItem('rememberedUsername');
-            }
-            
-            // Create session
-            sessionStorage.setItem('currentUser', JSON.stringify({
-                username: user.username,
-                phone: user.phone,
-                name: user.name,
-                isLoggedIn: true,
-                balance: user.balance || 0
-            }));
-            
-            // Redirect to dashboard
-            window.location.href = 'page7.html';
-        } else {
-            showError('Invalid username/phone or password');
-        }
-    });
-
-    // Forgot password modal
-    forgotPasswordLink.addEventListener('click', function(e) {
-        e.preventDefault();
-        forgotPasswordModal.style.display = 'block';
-    });
-
-    // Close modals
-    closeModals.forEach(btn => {
-        btn.addEventListener('click', function() {
-            forgotPasswordModal.style.display = 'none';
-            resetPasswordModal.style.display = 'none';
-        });
-    });
-
-    // Window click to close modals
-    window.addEventListener('click', function(e) {
-        if (e.target === forgotPasswordModal) {
-            forgotPasswordModal.style.display = 'none';
-        }
-        if (e.target === resetPasswordModal) {
-            resetPasswordModal.style.display = 'none';
-        }
-    });
-
-    // Forgot password form submission
-    forgotPasswordForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        const phone = resetPhoneInput.value.trim();
-        
-        if (!/^[6-9]\d{9}$/.test(phone)) {
-            alert('Please enter a valid 10-digit Indian phone number');
-            return;
-        }
-        
-        const users = JSON.parse(localStorage.getItem('users')) || [];
-        resetUser = users.find(u => u.phone === phone);
-        
-        if (resetUser) {
-            // In production, send OTP here
-            alert(`OTP would be sent to +91${phone} in production`);
-            forgotPasswordModal.style.display = 'none';
-            resetPasswordModal.style.display = 'block';
-        } else {
-            alert('No account found with this phone number');
-        }
-    });
-
-    // Reset password form submission
-    resetPasswordForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        const newPassword = newPasswordInput.value;
-        const confirmPassword = confirmNewPasswordInput.value;
-        
-        if (newPassword.length < 8) {
-            alert('Password must be at least 8 characters');
-            return;
-        }
-        
-        if (newPassword !== confirmPassword) {
-            alert('Passwords do not match');
-            return;
-        }
-        
-        // Update password in localStorage
-        const users = JSON.parse(localStorage.getItem('users')) || [];
-        const userIndex = users.findIndex(u => u.phone === resetUser.phone);
-        
-        if (userIndex !== -1) {
-            users[userIndex].password = btoa(newPassword);
-            localStorage.setItem('users', JSON.stringify(users));
-            alert('Password updated successfully!');
-            resetPasswordModal.style.display = 'none';
-        } else {
-            alert('Error updating password');
-        }
-    });
-
-    function showError(message) {
-        loginError.textContent = message;
-        loginError.classList.add('animate__animated', 'animate__headShake');
-        setTimeout(() => {
-            loginError.classList.remove('animate__animated', 'animate__headShake');
-        }, 1000);
+    if (!user) {
+      alert("Phone number not found in registered users.");
+      return;
     }
 
-    // Initialize the application
-    init();
+    resetUserPhone = phone;
+
+    // Use Firebase to send OTP
+    auth
+      .signInWithPhoneNumber("+91" + phone, window.recaptchaVerifier)
+      .then((confirmationResult) => {
+        window.confirmationResult = confirmationResult;
+        forgotPasswordModal.style.display = "none";
+        resetPasswordModal.style.display = "block";
+      })
+      .catch((error) => {
+        console.error(error);
+        alert("Failed to send OTP. Please try again later.");
+      });
+  });
+
+  // Reset Password submit - verify OTP and update password
+  resetPasswordForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    const otp = document.getElementById("otpInput").value.trim();
+    const newPass = document.getElementById("newPassword").value.trim();
+    const confirmPass = document.getElementById("confirmNewPassword").value.trim();
+
+    if (!otp || !newPass || !confirmPass) {
+      alert("Please fill all fields.");
+      return;
+    }
+
+    if (newPass !== confirmPass) {
+      alert("Passwords do not match.");
+      return;
+    }
+
+    if (newPass.length < 6) {
+      alert("Password should be at least 6 characters.");
+      return;
+    }
+
+    window.confirmationResult
+      .confirm(otp)
+      .then(() => {
+        // OTP verified successfully
+        const users = JSON.parse(localStorage.getItem("users")) || [];
+        const idx = users.findIndex((u) => u.phone === resetUserPhone);
+        if (idx === -1) {
+          alert("User not found.");
+          resetPasswordModal.style.display = "none";
+          return;
+        }
+
+        users[idx].password = btoa(newPass); // encode password
+        localStorage.setItem("users", JSON.stringify(users));
+
+        alert("Password updated successfully!");
+        resetPasswordModal.style.display = "none";
+      })
+      .catch(() => {
+        alert("Invalid OTP. Please try again.");
+      });
+  });
 });
